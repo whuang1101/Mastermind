@@ -7,7 +7,7 @@ class Game:
         self.current_round = 1
         self.num_of_players = num_of_players
         self.players = self.setPlayers(num_of_players)
-        self.current_player = 0
+        self.current_player = 1
         self.target = getRandomNumbers(num_of_random_nums)
         self.winner = 0
     def increment_round(self):
@@ -19,8 +19,8 @@ class Game:
         return all_players
 
     def check_guess(self, guess):
-        print(guess)
-        print(self.target)
+        current_player = self.players[self.current_player % self.num_of_players - 1]
+        
         target_dict = Counter(self.target)
         correct_numbers = 0
         correct_positions = 0
@@ -30,8 +30,14 @@ class Game:
                 target_dict[char] -= 1
             if char == self.target[i]:
                 correct_positions += 1
-        return correct_numbers, correct_positions
+        if correct_positions == 4:
+            return "correct"
         # current_player.add_to_history(guess,correct_positions,correct_numbers)
+        if self.current_player + 1 > self.num_of_players:
+            self.current_player = 1
+        else:
+            self.current_player += 1
+        return f"Your guess was {guess}. You got {correct_positions} numbers in the correct position and {correct_numbers} numbers correct"
     # def newTurn(self,total_nums):
     #     player_turn = self.current_player % self.num_of_players + 1
     #     current_player = self.players[(player_turn - 1)]
