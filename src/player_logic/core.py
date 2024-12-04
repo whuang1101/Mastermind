@@ -8,8 +8,10 @@ class Player:
 
     def display_history(self):
         if not self.guess_history:
-            print("No guesses made yet")
+            return "No guesses were made by this player yet"
         else:
-            print("Here's your history: ")
+            history = ["Here's your history: ",]
             for (i, (num, pos, cor_num)) in enumerate(self.guess_history):
-                print(f"In round {i + 1} you guessed {num} and you got {pos} positions correct and {cor_num} numbers correct")
+                history.append(f"In round {i + 1} you guessed {num} and you got {pos} positions correct and {cor_num} numbers correct")
+            
+            return "\n".join(history)
