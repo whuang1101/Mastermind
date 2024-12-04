@@ -1,4 +1,6 @@
 import tkinter as tk
-from src.ui.game_interface import Game_Screen
+from src.ui.game_interface import MasterMindApp
 if __name__ == "__main__":
-    Game_Screen()
+    app = MasterMindApp()
+
+    app.mainloop()
