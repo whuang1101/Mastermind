@@ -12,13 +12,13 @@ class Game:
         self.num_of_players = num_of_players
         self.num_of_random_nums = num_of_random_nums
         self.time = time.time()
+        self.total_time = time.time()
         self.reset_game()
         self.hints = []
     def reset_game(self):
         """
         Resets the game to the original state 
         """
-        
         self.current_round = 1
         self.current_player = 1
         self.target = getRandomNumbers(self.num_of_random_nums,0,7) 
@@ -27,6 +27,7 @@ class Game:
         self.winner = 0
         self.hints = []
         self.time = time.time()
+        self.total_time = time.time()
 
     def increment_round(self):
         """"Increment the round and lowers the turns remaining"""
@@ -70,7 +71,7 @@ class Game:
             return "Game Over"
         if correct_positions == self.num_of_random_nums:
             new_time = time.time()
-            print(new_time - self.time)
+            print(new_time - self.total_time)
             return "correct"
         
         self.current_player = self.current_player % self.num_of_players + 1
@@ -82,7 +83,7 @@ class Game:
         print(self.current_round, self.num_of_rounds)
         if self.current_round >= self.num_of_rounds and self.current_player == self.num_of_players :
             new_time = time.time()
-            print(new_time - self.time)
+            print(new_time - self.total_time)
             return True
         else:
             return False
