@@ -1,5 +1,6 @@
 from collections import Counter
 from src.game_logic.utils import getRandomNumbers
+from src.player_logic.core import Player
 class Game:
     def __init__(self,num_of_rounds,num_of_players, num_of_random_nums):
         self.num_of_rounds = num_of_rounds
