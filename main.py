@@ -1,5 +1,5 @@
 import tkinter as tk
-from src.ui.game_interface import MasterMindApp
+from src.ui.app import MasterMindApp
 if __name__ == "__main__":
     app = MasterMindApp()
 

@@ -35,10 +35,16 @@ class Game:
                 target_dict[char] -= 1
             if char == self.target[i]:
                 correct_positions += 1
+        current_player.add_to_history(guess,correct_positions,correct_numbers)
+
         if correct_positions == 4:
             return "correct"
-        current_player.add_to_history(guess,correct_positions,correct_numbers)
+        if self.current_round > self.num_of_rounds and self.current_player == self.num_of_players :
+            return "Game Over"
         self.current_player = self.current_player % self.num_of_players + 1
+
+        # current_player.add_to_history(guess,correct_positions,correct_numbers)
+        # self.current_player = self.current_player % self.num_of_players + 1
         print(self.current_player)
 
         # if self.current_player + 1 > self.num_of_players:
