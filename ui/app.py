@@ -6,7 +6,7 @@ class MasterMindApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("MasterMind")
-        self.geometry("600x400")
+        self.geometry("800x600")
         self.frames = {}
         self.pages = {
             "main_menu": MainMenu,
