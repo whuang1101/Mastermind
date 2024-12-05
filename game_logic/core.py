@@ -79,7 +79,8 @@ class Game:
     
 
     def game_over(self):
-        if self.current_round > self.num_of_rounds and self.current_player == self.num_of_players :
+        print(self.current_round, self.num_of_rounds)
+        if self.current_round >= self.num_of_rounds and self.current_player == self.num_of_players :
             new_time = time.time()
             print(new_time - self.time)
             return True
@@ -93,7 +94,7 @@ class Game:
 
     def give_hint(self):
         """
-        Gives one hit at a time 
+        Gives one hint at a time 
         """
             # Generate a set of all possible indices
         possible_indices = set(range(self.num_of_random_nums))

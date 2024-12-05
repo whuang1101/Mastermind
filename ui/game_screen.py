@@ -131,5 +131,6 @@ class GameScreen(tk.Frame):
         if feedback == "Game Over":
             self.feedback_label.config(text="Game is over, you lost!")
             self.submit_button.config(text="Try Again?",command =self.reset_game )
+            self.round_label.config(text = f"Round {self.game.current_round - 1}")
             return
 

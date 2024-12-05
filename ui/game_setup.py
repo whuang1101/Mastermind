@@ -18,7 +18,7 @@ class GameScreenSetup(tk.Frame):
             ).pack(anchor="w")
 
         tk.Label(self, text="Select Difficulty Level:").pack()
-        difficulty_options = ["Easy", "Medium", "Hard"]
+        difficulty_options = ["Easy", "Medium", "Hard", "Extreme"]
         for difficulty in difficulty_options:
             tk.Radiobutton(
                 self, text=difficulty, variable=self.difficulty, value=difficulty
@@ -39,6 +39,7 @@ class GameScreenSetup(tk.Frame):
             "Easy": (10, 4),  
             "Medium": (7, 5),
             "Hard": (5, 6), 
+            "Extreme": (3,8)
         }
 
         num_of_rounds, target_length = difficulty_settings[self.difficulty.get()]
