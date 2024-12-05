@@ -1,6 +1,6 @@
-from src.ui.main_menu import MainMenu
-from src.ui.game_setup import GameScreenSetup
-from src.ui.game_screen import GameScreen
+from .main_menu import MainMenu
+from .game_setup import GameScreenSetup
+from .game_screen import GameScreen
 import tkinter as tk
 class MasterMindApp(tk.Tk):
     def __init__(self):

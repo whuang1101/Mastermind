@@ -45,6 +45,7 @@ class GameScreenSetup(tk.Frame):
         num_of_players = self.num_of_players.get()
 
         game_screen = self.controller.frames["game_screen"]
+        print(num_of_rounds,num_of_players,target_length)
         game_screen.set_game_parameters(num_of_rounds, num_of_players, target_length)
 
         self.controller.show_frame("game_screen")

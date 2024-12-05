@@ -1,5 +1,5 @@
 import tkinter as tk
-from src.game_logic.core import Game
+from game_logic.core import Game
 
 class GameScreen(tk.Frame):
     def __init__(self,parent,controller):
@@ -11,7 +11,6 @@ class GameScreen(tk.Frame):
     
     def set_game_parameters(self, num_of_rounds, num_of_players, target_length):
         self.game = Game(num_of_rounds, num_of_players, target_length)
-        self.reset_game()
     def create_widgets(self):
 
         self.round_label = tk.Label(self, text="Round: 1")
