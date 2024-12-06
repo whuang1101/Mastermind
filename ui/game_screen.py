@@ -13,9 +13,10 @@ class GameScreen(tk.Frame):
         self.game = Game(num_of_rounds, num_of_players, target_length)
         self.turn_label.config(text=f"Turns remaining: {num_of_rounds}")
         self.inputs = [tk.StringVar() for _ in range(target_length)]
+        self.round_label.config(text =f"Round 1/{self.game.num_of_rounds}")
         self.guess_labels = []
         for i in range(target_length):
-            entry = tk.Entry(self, textvariable=self.inputs[i], width=5)
+            entry = tk.Entry(self, textvariable=self.inputs[i], width=target_length)
             entry.grid(row=3, column=i, padx=5)
             self.guess_labels.append(entry)
 
@@ -69,7 +70,7 @@ class GameScreen(tk.Frame):
         self.game.reset_game()
         self.round_label.config(text="Round 1")
         self.player_label.config(text="Player 1's Turn:")
-        self.turn_label.config(text="Turns remaining: 10")
+        self.turn_label.config(text=f"Turns remaining: {self.game.num_of_rounds}")
         self.feedback_label.config(text="Make your guess!")
         self.submit_button.config(text="Submit Guess", command=self.submit_guess)
         self.hint_label.config(text = "")
@@ -105,6 +106,8 @@ class GameScreen(tk.Frame):
             if len(str(number)) != 1 and 0 <= number <= 7:
                 self.feedback_label.config(text="Please only have 1 number per square and make sure it's below 7")
                 return
+            
+        
         feedback = self.game.check_guess(guess)
 
         # Confirms backend check and gives feedback on what to change if ti passes the frontend.
@@ -112,9 +115,7 @@ class GameScreen(tk.Frame):
             self.feedback_label.config(text=f"Feedback: {feedback}")
             return
         self.feedback_label.config(text=f"Feedback: {feedback}")
-
-        if self.game.current_player == self.game.num_of_players:
-            self.game.increment_round()
+        print(self.game.current_player, self.game.num_of_players)
 
         if feedback == "correct":
             self.feedback_label.config(text="Congratulations! You won!")
@@ -123,13 +124,13 @@ class GameScreen(tk.Frame):
             return
 
 
-        self.round_label.config(text = f"Round {self.game.current_round}")
+        self.round_label.config(text = f"Round {self.game.current_round}/{self.game.num_of_rounds}")
         self.turn_label.config(text= f"Turns remaining: {self.game.turns_remaining}")
 
         self.player_label.config(text = f"Player {self.game.current_player}'s Turn:")
         self.history_label.grid_forget()
         if feedback == "Game Over":
-            self.feedback_label.config(text="Game is over, you lost!")
+            self.feedback_label.config(text=f"Game is over, you lost! The correct answer was {self.game.target}")
             self.submit_button.config(text="Try Again?",command =self.reset_game )
             self.round_label.config(text = f"Round {self.game.current_round - 1}")
             return

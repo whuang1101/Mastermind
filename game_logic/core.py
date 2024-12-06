@@ -11,79 +11,94 @@ class Game:
         self.num_of_rounds = num_of_rounds
         self.num_of_players = num_of_players
         self.num_of_random_nums = num_of_random_nums
-        self.time = time.time()
-        self.total_time = time.time()
         self.reset_game()
-        self.hints = []
     def reset_game(self):
         """
         Resets the game to the original state 
         """
+
         self.current_round = 1
         self.current_player = 1
         self.target = getRandomNumbers(self.num_of_random_nums,0,7) 
         self.turns_remaining = self.num_of_rounds
-        self.players = self.setPlayers(self.num_of_players)
+        self.players = [Player() for _ in range(self.num_of_players)]
         self.winner = 0
         self.hints = []
         self.time = time.time()
         self.total_time = time.time()
+        self.max_hints = []
 
     def increment_round(self):
         """"Increment the round and lowers the turns remaining"""
         self.current_round += 1
         self.turns_remaining -= 1
-    def setPlayers(self,num_of_players):
-        """Makes it so that multiplayer is possible and that they each can have their own history"""
-        all_players = []
-        for i in range(num_of_players):
-            all_players.append(Player())
-        return all_players
 
-    def check_guess(self, guess):
-        
-        """"Logic to check if guess is correct"""
-        
-        #Make sure it's a list of ints between 0 - 7
-        if not isinstance(guess, list):
-            return "Invalid input: Guess must be a list of numbers."
-        if len(guess) != self.num_of_random_nums:
-            return f"Invalid input: The list needs to be {self.num_of_random_nums} long."
-        if not (isinstance(num, int) and 0<= num <= 7 for num in guess):
-            return f"Invalid input: All numbers must be within 0 to 7 inclusive."
+    def get_current_player(self):
+        return self.players[self.current_player - 1]
+    
 
-        current_player = self.players[self.current_player - 1]
+    def validate_guess(self,guess):
+        """
+        Breaking down check_guess into a validate and evaluate
+        """
+        return (
+            isinstance(guess, list)
+            and len(guess) == self.num_of_random_nums
+            and all(isinstance(num, int) and 0 <= num <= 7 for num in guess)
+        )
+    
+    def evaluate_guess(self, guess):
         
         target_dict = Counter(self.target)
         correct_numbers = 0
         correct_positions = 0
+        
         for i,char in enumerate(guess):
             if char in target_dict and target_dict[char] != 0:
                 correct_numbers += 1
                 target_dict[char] -= 1
             if char == self.target[i]:
                 correct_positions += 1
-        new_time = time.time() - self.time
-        self.time = time.time()
-        current_player.add_to_history(guess,correct_positions,correct_numbers, new_time)
 
-        if self.game_over():
-            return "Game Over"
+        return correct_numbers, correct_positions
+    
+
+    def check_guess(self, guess):
+        
+        """"Logic to check if guess is correct"""
+        
+        if not self.validate_guess(guess):
+            return f"Invalid guess: Ensure it's a list of {self.num_of_random_nums} integers between 0 and 7."
+        current_player = self.get_current_player()
+        
+        correct_numbers,correct_positions = self.evaluate_guess(guess)
+
+        #Getting time for each player
+        turn_time = time.time() - self.time
+        self.time = time.time()
+        current_player.add_to_history(guess,correct_positions,correct_numbers, turn_time)
+
+        if self.current_player == self.num_of_players:
+            self.increment_round()
         if correct_positions == self.num_of_random_nums:
             new_time = time.time()
-            print(new_time - self.total_time)
             return "correct"
         
+        if self.game_over():
+            return "Game Over"
+
+
+
         self.current_player = self.current_player % self.num_of_players + 1
+            
+
 
         return f"Your guess was {guess}. You got {correct_positions} numbers in the correct position and {correct_numbers} numbers correct"
     
 
     def game_over(self):
-        print(self.current_round, self.num_of_rounds)
-        if self.current_round >= self.num_of_rounds and self.current_player == self.num_of_players :
+        if self.current_round > self.num_of_rounds and self.current_player == self.num_of_players :
             new_time = time.time()
-            print(new_time - self.total_time)
             return True
         else:
             return False
@@ -97,9 +112,10 @@ class Game:
         """
         Gives one hint at a time 
         """
+        if self.max_hints:
+            return f"There is a {hints} somewhere in the answer. No more hints are available"
             # Generate a set of all possible indices
         possible_indices = set(range(self.num_of_random_nums))
-
         remaining_indices = possible_indices - set(self.hints)
 
         if remaining_indices:
@@ -107,7 +123,8 @@ class Game:
             self.hints.append(new_hint)
 
         hints = [self.target[hint] for hint in self.hints]
-        if len(self.hints) == self.num_of_random_nums:    
+        if len(self.hints) == self.num_of_random_nums:
+            self.max_hints = hints[:]
             return f"There is a {hints} somewhere in the answer. No more hints are available"
         else:
             return f"There is a {hints} somewhere in the answer."
