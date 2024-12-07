@@ -1,5 +1,5 @@
 from collections import Counter
-from game_logic.utils import getRandomNumbers
+from game_logic.utils import get_random_numbers
 from player_logic.core import Player
 import random
 import time
@@ -7,19 +7,20 @@ class Game:
     """
     A class to manage the core logic of the guessing game.
     """
-    def __init__(self,num_of_rounds,num_of_players, num_of_random_nums):
+    def __init__(self,num_of_rounds,num_of_players, num_of_random_nums,game_id):
         self.num_of_rounds = num_of_rounds
         self.num_of_players = num_of_players
         self.num_of_random_nums = num_of_random_nums
+        self.game_id = ""
         self.reset_game()
+        self.all_guesses = set()
     def reset_game(self):
         """
         Resets the game to the original state 
         """
-
         self.current_round = 1
         self.current_player = 1
-        self.target = getRandomNumbers(self.num_of_random_nums,0,7) 
+        self.target = get_random_numbers(self.num_of_random_nums,0,7) 
         self.turns_remaining = self.num_of_rounds
         self.players = [Player() for _ in range(self.num_of_players)]
         self.winner = 0
@@ -27,6 +28,8 @@ class Game:
         self.time = time.time()
         self.total_time = time.time()
         self.max_hints = []
+        self.win = False
+        self.lose = False
 
     def increment_round(self):
         """"Increment the round and lowers the turns remaining"""
@@ -47,6 +50,8 @@ class Game:
             and all(isinstance(num, int) and 0 <= num <= 7 for num in guess)
         )
     
+    def is_guess_used(self,guess):
+        return guess in self.all_guesses
     def evaluate_guess(self, guess):
         
         target_dict = Counter(self.target)
@@ -69,6 +74,11 @@ class Game:
         
         if not self.validate_guess(guess):
             return f"Invalid guess: Ensure it's a list of {self.num_of_random_nums} integers between 0 and 7."
+        
+        if self.is_guess_used(tuple(guess)):
+            return f"Someone already guessed {guess} try again!"
+        else:
+            self.all_guesses.add(tuple(guess))
         current_player = self.get_current_player()
         
         correct_numbers,correct_positions = self.evaluate_guess(guess)
@@ -82,16 +92,19 @@ class Game:
             self.increment_round()
         if correct_positions == self.num_of_random_nums:
             new_time = time.time()
-            return "correct"
+            self.win = True
+            return f"Player {self.current_player} wins!"
         
         if self.game_over():
-            return "Game Over"
+            new_time = time.time()
+            self.lose = True
+            return f"No one wins! The solution was {self.target}"
+        
 
 
 
         self.current_player = self.current_player % self.num_of_players + 1
             
-
 
         return f"Your guess was {guess}. You got {correct_positions} numbers in the correct position and {correct_numbers} numbers correct"
     

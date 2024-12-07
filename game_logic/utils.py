@@ -1,6 +1,6 @@
 import requests
 
-def getRandomNumbers(number_of_ints, min_guess,max_guess):
+def get_random_numbers(number_of_ints, min_guess,max_guess):
 
     """
     Can change the number of ints desired, the minimum number and the max_guess. If max guess over 10 need to refactor boundaries.

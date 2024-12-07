@@ -1,2 +1,2 @@
 from .core import Game
-from .utils import getRandomNumbers
+from .utils import get_random_numbers

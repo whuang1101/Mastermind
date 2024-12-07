@@ -1,7 +1,7 @@
 import pytest
 from game_logic.core import Game
 from player_logic.core import Player
-from game_logic.utils import getRandomNumbers
+from game_logic.utils import get_random_numbers
 
 @pytest.fixture
 def game():
