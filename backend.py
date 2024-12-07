@@ -1,11 +1,36 @@
 from flask import Flask, request, jsonify
 from game_logic.core import Game
+import sqlite3
 import uuid
-
+import os
+import json
 
 app = Flask(__name__)
 
 games = {}
+DATABASE_PATH = os.getenv('DATABASE_PATH', 'database/games.db')
+
+def get_db():
+    return sqlite3.connect(DATABASE_PATH)
+def init_db():
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS games (
+                game_id TEXT PRIMARY KEY,
+                num_of_rounds INTEGER,
+                num_of_players INTEGER,
+                num_of_random_nums INTEGER,
+                current_round INTEGER,
+                current_player INTEGER,
+                win BOOLEAN,
+                lose BOOLEAN,
+                target TEXT,
+                time REAL
+                    
+            )
+        ''')
+        conn.commit()
 
 @app.route("/start_game", methods=["POST"])
 def start_game():
@@ -19,9 +44,19 @@ def start_game():
         return jsonify({"error": f"Missing parameter: {e.args[0]}"}), 400
     
     game_id = str(uuid.uuid4())
+    
     game = Game(num_of_rounds, num_of_players, num_of_random_nums,game_id)
+    
     games[game_id] = game   
-
+    target_json = json.dumps(game.target)
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO games (game_id, num_of_rounds, num_of_players, num_of_random_nums, current_round, current_player, win, lose, target)
+            VALUES (?, ?, ?, ?, 1, 1, 0, 0, ?, 0)
+        ''', (game_id, num_of_rounds, num_of_players, num_of_random_nums, target_json))
+        conn.commit()
+    
     return jsonify({
         "message": "Game started successfully!",
         "game_id": game_id
@@ -112,4 +147,7 @@ def game_status():
 
 
 if __name__ == "__main__":
+    if not os.path.exists('database'):
+        os.makedirs('database')  
+    init_db()
     app.run(debug=True)
