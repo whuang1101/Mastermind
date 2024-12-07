@@ -14,6 +14,8 @@ class Game:
         self.game_id = ""
         self.reset_game()
         self.all_guesses = set()
+        self.score = 0
+ 
     def reset_game(self):
         """
         Resets the game to the original state 
@@ -26,10 +28,11 @@ class Game:
         self.winner = 0
         self.hints = []
         self.time = time.time()
-        self.total_time = time.time()
+        self.start_time = time.time()
         self.max_hints = []
         self.win = False
         self.lose = False
+        self.total_time = time.time()
 
     def increment_round(self):
         """"Increment the round and lowers the turns remaining"""
@@ -52,6 +55,7 @@ class Game:
     
     def is_guess_used(self,guess):
         return guess in self.all_guesses
+   
     def evaluate_guess(self, guess):
         
         target_dict = Counter(self.target)
@@ -90,31 +94,32 @@ class Game:
 
         if self.current_player == self.num_of_players:
             self.increment_round()
-        if correct_positions == self.num_of_random_nums:
+        if self.check_win(correct_positions):
             new_time = time.time()
+            self.total_time = new_time - self.start_time
             self.win = True
-            return f"Player {self.current_player} wins!"
-        
-        if self.game_over():
+            self.score = self.get_score()
+            return f"Player {self.current_player} wins! Your score is {self.score}"
+        if self.check_loss():
             new_time = time.time()
+            self.total_time = new_time - self.start_time
             self.lose = True
             return f"No one wins! The solution was {self.target}"
         
-
-
 
         self.current_player = self.current_player % self.num_of_players + 1
             
 
         return f"Your guess was {guess}. You got {correct_positions} numbers in the correct position and {correct_numbers} numbers correct"
     
+    def check_win(self, correct_positions):
+        """Check if the current player has won"""
+        return correct_positions == self.num_of_random_nums
 
-    def game_over(self):
-        if self.current_round > self.num_of_rounds and self.current_player == self.num_of_players :
-            new_time = time.time()
-            return True
-        else:
-            return False
+    def check_loss(self):
+        """Check if the game is over and no one won"""
+        return self.current_round > self.num_of_rounds and self.current_player == self.num_of_players
+   
     def show_player_history(self):
         """Shows current player history can refactor to show all by creating a new class variable that appends all player guesses"""
         current_player = self.players[self.current_player % self.num_of_players - 1]
@@ -142,3 +147,7 @@ class Game:
         else:
             return f"There is a {hints} somewhere in the answer."
 
+    def get_score(self):
+        rounds_left = self.num_of_rounds - self.current_round
+
+        return (1 / self.num_of_rounds) * 1000 + len(self.target) * 200 + rounds_left * 100

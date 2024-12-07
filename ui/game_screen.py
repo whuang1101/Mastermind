@@ -40,6 +40,7 @@ class GameScreen(tk.Frame):
             game_status = response.json()
             self.num_of_rounds = game_status["num_of_rounds"]
             self.target_length = len(game_status["target"])
+            self.num_of_players = game_status["num_of_players"]
             self.round_label.config(text=f"Round {game_status['current_round']}/{game_status['num_of_rounds']}")
             self.turn_label.config(text=f"Turns remaining: {game_status['turns_remaining']}")
             self.player_label.config(text=f"Player {game_status['current_player']}'s Turn:")
@@ -81,32 +82,26 @@ class GameScreen(tk.Frame):
     def main_menu(self):
         self.controller.show_frame("main_menu")
 
-        self.round_label.config(text="Round 1")
-        self.player_label.config(text="Player 1's Turn:")
-        self.turn_label.config(text="Turns remaining: 10")
-        self.feedback_label.config(text="Make your guess!")
-
-        self.submit_button.config(text="Submit Guess", command=self.submit_guess)
+        self.submit_button.config(text="Submit Guess", command=lambda: self.submit_guess())
         for entry in self.guess_labels:
             entry.destroy()  
         self.history_label.config(text="")
         self.history_label.grid_remove()
 
-    def reset_game(self):
-        if not self.game:
-            return
-        self.game.reset_game()
-        self.round_label.config(text="Round 1")
-        self.player_label.config(text="Player 1's Turn:")
-        self.turn_label.config(text=f"Turns remaining: {self.num_of_rounds}")
-        self.feedback_label.config(text="Make your guess!")
-        self.submit_button.config(text="Submit Guess", command=self.submit_guess)
-        self.hint_label.config(text = "")
+    def start_new_game(self, num_of_rounds, num_of_players,target_length):
 
-        for var in self.inputs:
-            var.set("")  
+        # Clear input fields
+        for entry in self.guess_labels:
+            entry.destroy()
+        # Reset any other UI elements (e.g., history, hint)
+        self.submit_button.config(text="Submit Guess", command=lambda: self.submit_guess())
+        self.feedback_label.config(text="Make your guess!")
         self.history_label.config(text="")
         self.history_label.grid_remove()
+
+
+        self.initialize_game(num_of_rounds,num_of_players,target_length)  # Example parameters
+    
 
     def get_hint(self):
         hint_response = requests.get(f"{self.api_base_url}/hint?game_id={self.game_id}")
@@ -120,7 +115,7 @@ class GameScreen(tk.Frame):
         self.history_label.grid(row=8, column=0, columnspan=4, pady=10)
 
         #shows each individual players history
-        history_response = requests.get(f"{self.api_base_url}/player_history")
+        history_response = requests.get(f"{self.api_base_url}/player_history?game_id={self.game_id}")
         if history_response.status_code == 200:
             history_json = history_response.json()
             self.history_label.config(text= history_json["history"])
@@ -150,14 +145,13 @@ class GameScreen(tk.Frame):
         win_loss = requests.get(f"{self.api_base_url}/win_loss?game_id={self.game_id}")
         if win_loss.status_code == 200:
             win_loss_json = win_loss.json()
-            if win_loss_json["status"] == "win":
-                self.feedback_label.config(text="Congratulations! You won!")
-                self.submit_button.config(text="Play Again?",command =self.reset_game )
+            if win_loss_json["status"] == "winner":
+                self.submit_button.config(text="Play Again?",command =lambda: self.start_new_game(self.num_of_rounds, self.num_of_players, self.target_length) )
                 return
-            if win_loss_json["status"] == "loss":
-                self.feedback_label.config(text=f"Game is over, you lost! The correct answer was {self.game.target}")
+            if win_loss_json["status"] == "game_over":
                 self.submit_button.config(text="Try Again?",command =self.reset_game )
                 self.round_label.config(text = f"Round {self.game.current_round - 1}")
+                return
 
 
 

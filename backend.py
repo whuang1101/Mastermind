@@ -42,6 +42,7 @@ def get_game_stats():
         "current_player": game.current_player,
         "win": game.win,
         "lose": game.lose,
+        "num_of_players": game.num_of_players
 
     }
     
