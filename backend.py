@@ -5,7 +5,7 @@ import uuid
 import os
 import json
 import time
-from database_utils import get_db
+from database_utils import get_db, find_game
 from flask_caching import Cache
 app = Flask(__name__)
 
@@ -68,7 +68,33 @@ def get_all_games():
         else:
             return jsonify({"message": "No games found."}), 404
 
+@app.route("/load_game", methods= ["GET"])
+def load_game():
+    game_id = request.args.get("game_id").strip()
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM games WHERE game_id = ?", (game_id,))
+        row = cursor.fetchone()
+        if row:
+            game = Game.from_db(row)
+            print(f"Game loaded successfully: {row}")
+        else:
+            print(f"No game found for game_id: {game_id}")
 
+    cache.set(game_id, game, timeout= CACHE_TIMEOUT)
+    if game:
+        game_status = {
+            "target_length": len(game.target),
+            "turns_remaining": game.num_of_rounds - game.current_round + 1,
+            "current_round": game.current_round,
+            "current_player": game.current_player,
+            "num_of_rounds": game.num_of_rounds,
+            "num_of_players": game.num_of_players,
+        }
+        
+        return jsonify({"game": game_status}), 200
+    else:
+        return jsonify({"message": "Error loading game!"}), 50
 
 # Start of the backend code 
 @app.route("/start_game", methods=["POST"])
@@ -136,6 +162,8 @@ def get_game_stats():
     game_id = request.args.get("game_id") 
     
     game = cached_or_get_from_db(game_id)
+    if not game:
+        return jsonify({"error": "Game not found!"}), 404
 
 
     if game:
@@ -160,6 +188,8 @@ def get_game_stats():
 def make_guess():
     game_id = request.args.get("game_id") 
     game = cached_or_get_from_db(game_id)
+    if not game:
+        return jsonify({"error": "Game not found!"}), 404
 
 
     data = request.get_json()
@@ -177,10 +207,8 @@ def make_guess():
 def get_player_history():
     game_id = request.args.get("game_id") 
     game = cached_or_get_from_db(game_id)
-
-    
     if not game:
-        return jsonify({"error": "Game not started!"}), 400
+        return jsonify({"error": "Game not found!"}), 404
 
     history = game.show_player_history()
     
@@ -192,6 +220,8 @@ def get_player_history():
 def hint():
     game_id = request.args.get("game_id") 
     game = cached_or_get_from_db(game_id)
+    if not game:
+        return jsonify({"error": "Game not found!"}), 404
 
     hint = game.give_hint()
     return jsonify({"hint": hint}), 200
@@ -229,7 +259,7 @@ def cached_or_get_from_db(game_id):
             row = cursor.fetchone()
         
         if not row:
-            return jsonify({"error": "Game not found!"}), 404
+            return None
         
         game = Game.from_db(row)
     return game

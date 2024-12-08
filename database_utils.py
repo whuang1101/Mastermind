@@ -13,3 +13,15 @@ def delete_all_data():
         cursor.execute('DROP TABLE IF EXISTS games;')
         conn.commit()
 
+def find_game(game_id):
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM games")
+        row = cursor.fetchmany()
+        if row:
+            print(row)
+            return row
+        else:
+            return None
+        
+

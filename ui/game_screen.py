@@ -34,6 +34,27 @@ class GameScreen(tk.Frame):
             print("Error starting the game:", response.json())
 
 
+    def load_game(self, game_id):
+        game_response = requests.get(f"{self.api_base_url}/load_game?game_id={game_id} ")
+        if game_response.status_code == 200:
+            game = game_response.json().get("game")
+            self.num_of_rounds = game["num_of_rounds"]
+            self.target_length = game["target_length"]
+            self.num_of_players = game["num_of_players"]
+            self.game_id = game_id
+            self.turn_label.config(text=f"Turns remaining: {game['turns_remaining']}")
+            self.inputs = [tk.StringVar() for _ in range(game['target_length'])]
+            self.round_label.config(text=f"Round {game['current_round']}/{game['num_of_rounds']}")
+            self.player_label.config(text=f"Player {game['current_player']}'s Turn:")
+
+            self.guess_labels = []
+            for i in range(game['target_length']):
+                entry = tk.Entry(self, textvariable=self.inputs[i], width=game['target_length'])
+                entry.grid(row=3, column=i, padx=5)
+                self.guess_labels.append(entry)
+
+
+
     def update_game_status(self):
         """
         
@@ -41,7 +62,6 @@ class GameScreen(tk.Frame):
         response = requests.get(f"{self.api_base_url}/get_game_stats?game_id={self.game_id}")
         if response.status_code == 200:
             game_status = response.json()
-            print(game_status)
             self.num_of_rounds = game_status["num_of_rounds"]
             self.target_length = len(game_status["target"])
             self.num_of_players = game_status["num_of_players"]
