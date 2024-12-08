@@ -35,9 +35,13 @@ class GameScreen(tk.Frame):
 
 
     def update_game_status(self):
+        """
+        
+        """
         response = requests.get(f"{self.api_base_url}/get_game_stats?game_id={self.game_id}")
         if response.status_code == 200:
             game_status = response.json()
+            print(game_status)
             self.num_of_rounds = game_status["num_of_rounds"]
             self.target_length = len(game_status["target"])
             self.num_of_players = game_status["num_of_players"]
@@ -85,22 +89,26 @@ class GameScreen(tk.Frame):
         self.submit_button.config(text="Submit Guess", command=lambda: self.submit_guess())
         for entry in self.guess_labels:
             entry.destroy()  
+        self.feedback_label.config(text = "Make Guess")
         self.history_label.config(text="")
         self.history_label.grid_remove()
 
     def start_new_game(self, num_of_rounds, num_of_players,target_length):
-
+        """
+        Create a new game instance
+        """
         # Clear input fields
         for entry in self.guess_labels:
             entry.destroy()
-        # Reset any other UI elements (e.g., history, hint)
+
+
         self.submit_button.config(text="Submit Guess", command=lambda: self.submit_guess())
         self.feedback_label.config(text="Make your guess!")
         self.history_label.config(text="")
         self.history_label.grid_remove()
 
 
-        self.initialize_game(num_of_rounds,num_of_players,target_length)  # Example parameters
+        self.initialize_game(num_of_rounds,num_of_players,target_length)  
     
 
     def get_hint(self):
@@ -140,6 +148,7 @@ class GameScreen(tk.Frame):
         if response.status_code == 200:
             feedback = response.json()["message"]
             self.feedback_label.config(text=f"Feedback: {feedback}")
+        
 
         game_status = self.update_game_status()
         win_loss = requests.get(f"{self.api_base_url}/win_loss?game_id={self.game_id}")
@@ -155,16 +164,10 @@ class GameScreen(tk.Frame):
 
 
 
-        # Confirms backend check and gives feedback on what to change if ti passes the frontend.
+        # Confirms backend check and gives feedback on what to change if it passes the frontend.
         if feedback.startswith("Invalid"):
             self.feedback_label.config(text=f"Feedback: {feedback}")
             return
         self.feedback_label.config(text=f"Feedback: {feedback}")
-
-
-        # self.round_label.config(text = f"Round {self.game.current_round}/{self.num_of_rounds}")
-        # self.turn_label.config(text= f"Turns remaining: {self.turns_remaining}")
-
-        # self.player_label.config(text = f"Player {self.game.current_player}'s Turn:")
         self.history_label.grid_forget()
 

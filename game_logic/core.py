@@ -3,41 +3,100 @@ from game_logic.utils import get_random_numbers
 from player_logic.core import Player
 import random
 import time
+import json
+from database_utils import get_db
 class Game:
     """
     A class to manage the core logic of the guessing game.
     """
     def __init__(self,num_of_rounds,num_of_players, num_of_random_nums,game_id):
+        self.game_id = game_id
         self.num_of_rounds = num_of_rounds
         self.num_of_players = num_of_players
         self.num_of_random_nums = num_of_random_nums
-        self.game_id = ""
-        self.reset_game()
-        self.all_guesses = set()
-        self.score = 0
- 
-    def reset_game(self):
-        """
-        Resets the game to the original state 
-        """
         self.current_round = 1
         self.current_player = 1
         self.target = get_random_numbers(self.num_of_random_nums,0,7) 
-        self.turns_remaining = self.num_of_rounds
         self.players = [Player() for _ in range(self.num_of_players)]
         self.winner = 0
         self.hints = []
-        self.time = time.time()
-        self.start_time = time.time()
         self.max_hints = []
         self.win = False
         self.lose = False
+        self.all_guesses = []
+        self.score = 0
+        self.time = time.time()
+        self.start_time = time.time()
         self.total_time = time.time()
+        self.end_time = time.time()
+
+        self.status = "Ongoing"
+    @staticmethod
+    def from_db(row):
+        game = Game(
+            row[1],
+            row[2],
+            row[3],
+            row[0]) #game_id
+        game.current_round = row[4]
+        game.current_player = row[5]
+        game.win = row[6]
+        game.lose = row[7]
+        game.target = json.loads(row[8])
+        game.start_time = row[9]
+        game.end_time = row[10]
+        game.total_time = row[11]
+        game.hint_usage = row[12]
+        game.score = row[13]
+        game.all_guesses = json.loads(row[14])
+        game.winner = row[15]
+        game.player_history = row[16]
+        game.status = row[17]
+        return game
+
+
+    def update_db(self):
+        with get_db() as conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                UPDATE games SET
+                    current_round = ?,
+                    current_player = ?,
+                    win = ?,
+                    lose = ?,
+                    target = ?,
+                    start_time = ?,
+                    end_time = ?,
+                    total_time = ?,
+                    hint_usage = ?,
+                    score = ?,
+                    all_guesses = ?,
+                    player_history = ?,
+                    status = ?
+                WHERE game_id = ?
+            ''', (
+                self.current_round,
+                self.current_player,
+                self.win,
+                self.lose,
+                json.dumps(self.target),
+                self.start_time,
+                self.end_time if self.lose or self.win else None,
+                self.total_time,
+                json.dumps(self.hints),
+                self.score,
+                json.dumps(self.all_guesses),
+                self.show_player_history(),
+                self.status,
+                self.game_id
+            ))
+            conn.commit()
+
 
     def increment_round(self):
         """"Increment the round and lowers the turns remaining"""
         self.current_round += 1
-        self.turns_remaining -= 1
+        self.update_db()
 
     def get_current_player(self):
         return self.players[self.current_player - 1]
@@ -82,7 +141,7 @@ class Game:
         if self.is_guess_used(tuple(guess)):
             return f"Someone already guessed {guess} try again!"
         else:
-            self.all_guesses.add(tuple(guess))
+            self.all_guesses.append(tuple(guess))
         current_player = self.get_current_player()
         
         correct_numbers,correct_positions = self.evaluate_guess(guess)
@@ -95,25 +154,30 @@ class Game:
         if self.current_player == self.num_of_players:
             self.increment_round()
         if self.check_win(correct_positions):
+            self.status = "Ended"
             new_time = time.time()
             self.total_time = new_time - self.start_time
             self.win = True
             self.score = self.get_score()
+            self.update_db()
             return f"Player {self.current_player} wins! Your score is {self.score}"
         if self.check_loss():
+            self.status = "Ended"
             new_time = time.time()
             self.total_time = new_time - self.start_time
             self.lose = True
+            self.update_db()
             return f"No one wins! The solution was {self.target}"
         
 
         self.current_player = self.current_player % self.num_of_players + 1
             
-
+        self.update_db()
         return f"Your guess was {guess}. You got {correct_positions} numbers in the correct position and {correct_numbers} numbers correct"
     
     def check_win(self, correct_positions):
         """Check if the current player has won"""
+
         return correct_positions == self.num_of_random_nums
 
     def check_loss(self):
@@ -140,6 +204,7 @@ class Game:
             new_hint = random.choice(list(remaining_indices))
             self.hints.append(new_hint)
 
+        self.update_db()
         hints = [self.target[hint] for hint in self.hints]
         if len(self.hints) == self.num_of_random_nums:
             self.max_hints = hints[:]

@@ -15,5 +15,17 @@ class MainMenu(tk.Frame):
         )
         start_button.pack(pady=10)
 
+        load_game = tk.Button(
+            self, text="Load Game",
+            command=lambda: self.load_game_frame()
+        )
+        load_game.pack(pady=10)
+        
+        start_button.pack(pady=10)
         exit_button = tk.Button(self, text="Exit", command=self.controller.quit)
         exit_button.pack(pady=10)
+
+    def load_game_frame(self):
+        game_screen = self.controller.frames["load_game"]
+        game_screen.load_games()
+        self.controller.show_frame("load_game")

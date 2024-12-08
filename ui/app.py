@@ -1,6 +1,7 @@
 from .main_menu import MainMenu
 from .game_setup import GameScreenSetup
 from .game_screen import GameScreen
+from .load_game import LoadGame
 import tkinter as tk
 class MasterMindApp(tk.Tk):
     def __init__(self):
@@ -11,7 +12,8 @@ class MasterMindApp(tk.Tk):
         self.pages = {
             "main_menu": MainMenu,
             "game_screen": GameScreen,
-            "game_set_up": GameScreenSetup
+            "game_set_up": GameScreenSetup,
+            "load_game": LoadGame
         }
 
         container = tk.Frame(self)
