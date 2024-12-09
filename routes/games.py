@@ -169,7 +169,7 @@ def game_status():
 def get_all_games():
     with get_db() as conn:
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM games')
+        cursor.execute('SELECT * FROM games WHERE status = ?', ('Ongoing',))
         rows = cursor.fetchall()
 
         if rows:
@@ -201,7 +201,6 @@ def load_game():
         game_data = cursor.fetchone()
         if game_data:
             game = Game.from_db(game_data)
-            print(game_data)
         else:
             print(f"No game found for game_id: {game_id}")
         

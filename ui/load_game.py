@@ -10,15 +10,11 @@ class LoadGame(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        # Static components
         header = tk.Label(self, text="Load a game:", font=("Arial", 24))
         header.pack(pady=20)
 
-        # Frame to hold game options (dynamic content)
         self.games_frame = tk.Frame(self)
         self.games_frame.pack(fill="both", expand=True)
-
-        # Buttons (static)
         self.start_button = tk.Button(
             self, text="Load Game",
             command=self.load_single_game
@@ -32,12 +28,10 @@ class LoadGame(tk.Frame):
         main_menu.pack(pady=10)
 
     def load_games(self):
-        # Clear the existing game options before adding new ones
         for widget in self.games_frame.winfo_children():
             widget.destroy()
 
         try:
-            # Fetch games from the API
             response = requests.get(f"{self.api_base_url}/get_all_games")
             response.raise_for_status()
             games = response.json()
@@ -56,7 +50,6 @@ class LoadGame(tk.Frame):
             tk.Label(self.games_frame, text=f"Error fetching games: {e}").pack()
 
     def load_single_game(self):
-        # Get the selected game ID and load the game
         selected_game_id = self.game_id_var.get()
         if not selected_game_id:
             tk.messagebox.showwarning("No Selection", "Please select a game to load.")
