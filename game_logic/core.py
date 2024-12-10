@@ -60,6 +60,7 @@ class Game:
                     SET game_id = ?
                     WHERE player_id = ?
                 ''', (json.dumps(game_id_history), player_id))
+                print(game_id_history)
                 if result:
                     return result
             
@@ -95,62 +96,108 @@ class Game:
                 ORDER BY player_order ASC
             ''', ('%' + game.game_id + '%',))
             player_rows = cursor.fetchall()
+            print(player_rows)
             game.players = [Player.from_db(row, game.game_id) for row in player_rows]  
         
         game.guess_set = set([tuple(guess) for guess in game.all_guesses])
         return game
 
 
-
     def update_db(self):
         """
-        Update the database with all the game data
+        Update the database with all the game data.
+        If the game_id is not found, insert a new game record.
         """
         with get_db() as conn:
             cursor = conn.cursor()
-            cursor.execute('''
-                UPDATE games SET
-                    current_round = ?,
-                    current_player = ?,
-                    win = ?,
-                    lose = ?,
-                    target = ?,
-                    start_time = ?,
-                    end_time = ?,
-                    total_time = ?,
-                    hint_usage = ?,
-                    score = ?,
-                    all_guesses = ?,
-                    player_history = ?,
-                    status = ?
-                WHERE game_id = ?
-            ''', (
-                self.current_round,
-                self.current_player,
-                self.win,
-                self.lose,
-                json.dumps(self.target),
-                self.start_time,
-                self.end_time if self.lose or self.win else None,
-                self.total_time,
-                json.dumps(self.hints),
-                self.score,
-                json.dumps(self.all_guesses),
-                self.show_player_history(),
-                self.status,
-                self.game_id
-            ))
-            conn.commit()
+
+            cursor.execute('SELECT 1 FROM games WHERE game_id = ?', (self.game_id,))
+            game_exists = cursor.fetchone()
+
+            if game_exists:
+                cursor.execute('''
+                    UPDATE games SET
+                        current_round = ?,
+                        current_player = ?,
+                        win = ?,
+                        lose = ?,
+                        target = ?,
+                        start_time = ?,
+                        end_time = ?,
+                        total_time = ?,
+                        hint_usage = ?,
+                        score = ?,
+                        all_guesses = ?,
+                        player_history = ?,
+                        status = ?
+                    WHERE game_id = ?
+                ''', (
+                    self.current_round,
+                    self.current_player,
+                    self.win,
+                    self.lose,
+                    json.dumps(self.target),
+                    self.start_time,
+                    self.end_time if self.lose or self.win else None,
+                    self.total_time,
+                    json.dumps(self.hints),
+                    self.score,
+                    json.dumps(self.all_guesses),
+                    self.show_player_history(),
+                    self.status,
+                    self.game_id
+                ))
+            else:
+                cursor.execute('''
+                    INSERT INTO games (
+                        num_of_rounds,
+                        num_of_players,
+                        num_of_random_nums,
+                        game_id,
+                        current_round,
+                        current_player,
+                        win,
+                        lose,
+                        target,
+                        start_time,
+                        end_time,
+                        total_time,
+                        hint_usage,
+                        score,
+                        all_guesses,
+                        player_history,
+                        status
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ''', (
+                    self.num_of_rounds,
+                    self.num_of_players,
+                    self.num_of_random_nums,
+                    self.game_id,
+                    self.current_round,
+                    self.current_player,
+                    self.win,
+                    self.lose,
+                    json.dumps(self.target),
+                    self.start_time,
+                    self.end_time if self.lose or self.win else None,
+                    self.total_time,
+                    json.dumps(self.hints),
+                    self.score,
+                    json.dumps(self.all_guesses),
+                    self.show_player_history(),
+                    self.status
+                ))
+                conn.commit()
+        
+        [player.update_db() for player in self.players]
 
 
     def increment_round(self):
         """"Increment the round and lowers the turns remaining"""
         self.current_round += 1
-        self.update_db()
+        #self.update_db()
 
     def get_current_player(self):
-        print(self.current_player)
-        print(self.players)
         return self.players[self.current_player - 1]
     
 
@@ -217,20 +264,20 @@ class Game:
             self.total_time = new_time - self.start_time
             self.win = True
             self.score = self.get_score()
-            self.update_db()
+            #self.update_db()
             return f"Player {self.current_player} wins! Your score is {self.score}"
         if self.check_loss():
             self.status = "Ended"
             new_time = time.time()
             self.total_time = new_time - self.start_time
             self.lose = True
-            self.update_db()
+            #self.update_db()
             return f"No one wins! The solution was {self.target}"
         
 
         self.current_player = self.current_player % self.num_of_players + 1
             
-        self.update_db()
+        #self.update_db()
         return f"Your guess was {guess}. You got {correct_positions} numbers in the correct position and {correct_numbers} numbers correct"
     
     def check_win(self, correct_positions):
@@ -262,7 +309,7 @@ class Game:
             new_hint = random.choice(list(remaining_indices))
             self.hints.append(new_hint)
 
-        self.update_db()
+        #self.update_db()
         hints = [self.target[hint] for hint in self.hints]
         if len(self.hints) == self.num_of_random_nums:
             self.max_hints = hints[:]

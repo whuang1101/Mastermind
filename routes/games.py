@@ -28,48 +28,23 @@ def start_game():
     cache = current_app.config['CACHE']
 
     cache.set(game_id,game, timeout= CACHE_TIMEOUT)
-    target_json = json.dumps(game.target)
-    start_time = time.time()
-    status = "in_progress"
-    total_time = 0
-    hint_usage = 0
-    score = 0
-    end_time = None
-    all_guesses = json.dumps([])
-    player_history = json.dumps([])
-
-    with get_db() as conn:
-        cursor = conn.cursor()
-        cursor.execute('''
-            INSERT INTO games (
-                game_id, num_of_rounds, num_of_players, num_of_random_nums,
-                current_round, current_player, win, lose, target,
-                start_time, status, end_time, total_time, hint_usage,
-                score, all_guesses, player_history, winner
-            )
-            VALUES (?, ?, ?, ?, 1, 1, 0, 0, ?, ?, ?, ?, ?, ?, ?, ?,?, 0)
-        ''', (
-            game_id,
-            num_of_rounds,
-            num_of_players,
-            num_of_random_nums,
-            target_json, 
-            start_time,
-            status,       
-            end_time,
-            total_time,
-            hint_usage,
-            score,
-            all_guesses, 
-            player_history, 
-        ))
-
-        conn.commit()
-
     return jsonify({
         "message": "Game started successfully!",
         "game_id": game_id
     }), 200
+
+@bp.route("/save_game",methods= ["POST"])
+def save_game():
+    data = request.get_json()
+    game_id = data.get("game_id")
+    
+    cache = current_app.config['CACHE']
+    game = cache.get(game_id)
+    if not game:
+        return jsonify({"error": "game was not found"})
+    game.update_db()
+    return jsonify({"message": "Game was updated"}), 200
+    
 
 @bp.route("/get_game_stats", methods=["GET"])
 def get_game_stats():

@@ -1,6 +1,8 @@
 import tkinter as tk
+from tkinter import messagebox
 from game_logic.core import Game
 import requests
+
 
 class GameScreen(tk.Frame):
     def __init__(self,parent,controller):
@@ -90,10 +92,16 @@ class GameScreen(tk.Frame):
 
 
         self.submit_button = tk.Button(self, text="Submit Guess", command=self.submit_guess)
-        self.submit_button.grid(row=4, column=0, columnspan=4, pady=10)
+        self.submit_button.grid(row=4, column=0, columnspan=2, pady=10)
+        self.save_button = tk.Button(self, text = "Save Game", command= self.save_game)
+        self.save_button.grid(row = 4, column= 2, columnspan=2, pady=10)
+
         
         self.show_hint = tk.Button(self, text = "Get hint", command = self.get_hint)
         self.show_hint.grid(row = 6, column = 0, columnspan=4, pady = 10)
+
+        self.exit_button = tk.Button(self, text="Exit Game", command=self.main_menu)
+        self.exit_button.grid(row = 5, column=0, columnspan=4, pady=10)
 
         self.hint_label = tk.Label(self, text= "")
         self.show_history = tk.Button(self, text = "Show Player History", command = self.show_history)
@@ -101,8 +109,8 @@ class GameScreen(tk.Frame):
         
         self.history_label = tk.Label(self, text= "")
 
-        self.start_button = tk.Button(self, text="Exit Game", command=self.main_menu)
-        self.start_button.grid(row = 5, column=0, columnspan=4, pady=10)
+
+
         
     def main_menu(self):
         self.controller.show_frame("main_menu")
@@ -191,4 +199,13 @@ class GameScreen(tk.Frame):
             return
         self.feedback_label.config(text=f"Feedback: {feedback}")
         self.history_label.grid_forget()
+
+    def save_game(self):
+        data = {"game_id": self.game_id}
+        try: 
+            res = self.current_session.post(f"{self.api_base_url}/save_game",json = data)
+            if res.status_code == 200:
+                messagebox.showinfo("Success", "Game Saved!")
+        except:
+            messagebox.showinfo("Success", "Failed to  Save!")
 

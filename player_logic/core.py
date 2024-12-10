@@ -16,7 +16,6 @@ class Player:
         if game_id not in self.game_histories:
             self.game_histories[game_id] = []
         self.game_histories[game_id].append([numbers, correct_positions, correct_numbers, time])
-        self.update_db()
 
     def display_history(self):
         if self.game_id in self.game_histories and not self.game_histories[self.game_id]:
