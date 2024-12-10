@@ -199,6 +199,8 @@ def load_game():
 
     cache.set(game_id, game, timeout= CACHE_TIMEOUT)
     if game:
+        print(game.current_player)
+        print(game.players)
         game_status = {
             "target_length": len(game.target),
             "turns_remaining": game.num_of_rounds - game.current_round + 1,
@@ -206,6 +208,7 @@ def load_game():
             "current_player": game.current_player,
             "num_of_rounds": game.num_of_rounds,
             "num_of_players": game.num_of_players,
+            "player_name": game.players[game.current_player - 1].name
         }
         
         return jsonify({"game": game_status}), 200

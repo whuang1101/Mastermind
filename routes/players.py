@@ -38,7 +38,8 @@ def register():
 def login():
     data = request.get_json()
     username = data.get("username").lower()
-    password = data.get("password")
+    username = username.strip()
+    password = data.get("password").strip()
 
     if not username or not password:
         return jsonify({"error": "Username and password are required"}), 500
@@ -47,10 +48,9 @@ def login():
         with get_db() as conn:
             cursor = conn.cursor()
             cursor.execute('''
-
-                        SELECT player_id, password FROM players WHERE username = ?
-                           ''',
-                           (username,))
+                    SELECT player_id, password FROM players WHERE username = ?
+                        ''',
+                        (username,))
             result = cursor.fetchone()
 
             if not result:
@@ -68,6 +68,12 @@ def login():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
         
+
+@bp.route("/logout", methods = ["POST"])
+def logout():
+    session.clear() 
+    return jsonify({"message": "Logged out successfully"}), 200
+
 @bp.route("/get_session",methods = ["GET"])
 def get_session():
     session_data = session

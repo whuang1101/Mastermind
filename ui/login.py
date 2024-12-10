@@ -20,6 +20,8 @@ class LoginPage(tk.Frame):
         self.password_entry = tk.Entry(self, show="*")
         self.password_entry.pack()
 
+        tk.Button(self, text = "Play as Guest", command = self.go_to_main_menu).pack()
+
         tk.Button(self, text="Login", command=self.login).pack(pady=10)
         tk.Button(self, text="Register", command=self.go_to_register).pack()
 
@@ -39,6 +41,8 @@ class LoginPage(tk.Frame):
             print(error_message)
             messagebox.showerror("Error", error_message)
 
+    def play_as_guest(self):
+        self.controller.show_frame("main_menu")
     def go_to_register(self):
         self.controller.show_frame("register")
     def go_to_main_menu(self):

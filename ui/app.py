@@ -37,6 +37,8 @@ class MasterMindApp(tk.Tk):
     def show_frame(self, page_name):
         frame = self.frames.get(page_name)
         if frame:
+            if hasattr(frame, "on_show"):
+                frame.on_show()
             frame.tkraise()
         else:
             print(f"Page '{page_name}' not found.")

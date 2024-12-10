@@ -48,7 +48,7 @@ class GameScreen(tk.Frame):
             self.turn_label.config(text=f"Turns remaining: {game['turns_remaining']}")
             self.inputs = [tk.StringVar() for _ in range(game['target_length'])]
             self.round_label.config(text=f"Round {game['current_round']}/{game['num_of_rounds']}")
-            self.player_label.config(text=f"Player {game['current_player']}'s Turn:")
+            self.player_label.config(text=f"{game['player_name']}'s Turn:")
 
             self.guess_labels = []
             for i in range(game['target_length']):
@@ -94,7 +94,6 @@ class GameScreen(tk.Frame):
         self.submit_button = tk.Button(self, text="Submit Guess", command=self.submit_guess)
         self.submit_button.grid(row=4, column=0, columnspan=2, pady=10)
         self.save_button = tk.Button(self, text = "Save Game", command= self.save_game)
-        self.save_button.grid(row = 4, column= 2, columnspan=2, pady=10)
 
         
         self.show_hint = tk.Button(self, text = "Get hint", command = self.get_hint)
@@ -108,6 +107,7 @@ class GameScreen(tk.Frame):
         self.show_history.grid(row=8, column=0, columnspan=4, pady=10)
         
         self.history_label = tk.Label(self, text= "")
+        
 
 
 
@@ -119,6 +119,7 @@ class GameScreen(tk.Frame):
         for entry in self.guess_labels:
             entry.destroy()  
         self.feedback_label.config(text = "Make Guess")
+        self.hint_label.grid_forget()
         self.history_label.config(text="")
         self.history_label.grid_remove()
 
@@ -149,7 +150,7 @@ class GameScreen(tk.Frame):
        
     #toggle on and off game_history
     def show_history(self):
-        self.history_label.grid(row=8, column=0, columnspan=4, pady=10)
+        self.history_label.grid(row=9, column=0, columnspan=4, pady=10)
 
         #shows each individual players history
         history_response = self.current_session.get(f"{self.api_base_url}/player_history?game_id={self.game_id}")
@@ -209,3 +210,12 @@ class GameScreen(tk.Frame):
         except:
             messagebox.showinfo("Success", "Failed to  Save!")
 
+
+    def on_show(self):
+        if self.controller.get_session().cookies.get_dict():
+            if not self.save_button.winfo_ismapped():
+                self.save_button.grid(row=4, column=2, columnspan=2, pady=10)
+
+        else:
+            if self.save_button.winfo_ismapped():  
+                self.save_button.grid_forget()

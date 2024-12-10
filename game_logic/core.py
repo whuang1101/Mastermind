@@ -36,10 +36,11 @@ class Game:
     def add_players(self, player_id = None):
         if player_id:
             self.players = [Player.from_db(self.get_player_from_db(player_id), self.game_id)]
-        else:
-            self.players = [Player(self.game_id, i + 1) for i in range(self.num_of_players)]
-            for player in self.players:
-                player.save()
+        num_guest_players = self.num_of_players - len(self.players)
+        for i in range(num_guest_players):
+            guest_player = Player(self.game_id, len(self.players) + 1)  
+            guest_player.name = f"Guest {len(self.players)}" 
+            self.players.append(guest_player)
     def get_player_from_db(self, player_id):
         with get_db() as conn:
             cursor = conn.cursor()
@@ -47,7 +48,6 @@ class Game:
                     SELECT player_id,name, score, game_histories, player_order, game_id from players WHERE player_id = ?
                            ''', (player_id, ))
             result = cursor.fetchone()
-
             if result:
                 if result[5] == None:
                     game_id_history  = []
@@ -64,133 +64,7 @@ class Game:
                 if result:
                     return result
             
-
-    @staticmethod
-
-    def from_db(row):
-        game = Game(
-            row[1],
-            row[2],
-            row[3],
-            row[0]) #game_id
-        game.current_round = row[4]
-        game.current_player = row[5]
-        game.win = row[6]
-        game.lose = row[7]
-        game.target = json.loads(row[8])
-        game.start_time = row[9]
-        game.end_time = row[10]
-        game.total_time = row[11]
-        game.hint_usage = row[12]
-        game.score = row[13]
-        game.all_guesses = json.loads(row[14])
-        game.winner = row[15]
-        game.player_history = row[16]
-        game.status = row[17]
-
-        with get_db() as conn:
-            cursor = conn.cursor()
-            cursor.execute('''
-                SELECT player_id,name, score, game_histories, player_order, game_id FROM players
-                WHERE game_histories LIKE ?
-                ORDER BY player_order ASC
-            ''', ('%' + game.game_id + '%',))
-            player_rows = cursor.fetchall()
-            print(player_rows)
-            game.players = [Player.from_db(row, game.game_id) for row in player_rows]  
-        
-        game.guess_set = set([tuple(guess) for guess in game.all_guesses])
-        return game
-
-
-    def update_db(self):
-        """
-        Update the database with all the game data.
-        If the game_id is not found, insert a new game record.
-        """
-        with get_db() as conn:
-            cursor = conn.cursor()
-
-            cursor.execute('SELECT 1 FROM games WHERE game_id = ?', (self.game_id,))
-            game_exists = cursor.fetchone()
-
-            if game_exists:
-                cursor.execute('''
-                    UPDATE games SET
-                        current_round = ?,
-                        current_player = ?,
-                        win = ?,
-                        lose = ?,
-                        target = ?,
-                        start_time = ?,
-                        end_time = ?,
-                        total_time = ?,
-                        hint_usage = ?,
-                        score = ?,
-                        all_guesses = ?,
-                        player_history = ?,
-                        status = ?
-                    WHERE game_id = ?
-                ''', (
-                    self.current_round,
-                    self.current_player,
-                    self.win,
-                    self.lose,
-                    json.dumps(self.target),
-                    self.start_time,
-                    self.end_time if self.lose or self.win else None,
-                    self.total_time,
-                    json.dumps(self.hints),
-                    self.score,
-                    json.dumps(self.all_guesses),
-                    self.show_player_history(),
-                    self.status,
-                    self.game_id
-                ))
-            else:
-                cursor.execute('''
-                    INSERT INTO games (
-                        num_of_rounds,
-                        num_of_players,
-                        num_of_random_nums,
-                        game_id,
-                        current_round,
-                        current_player,
-                        win,
-                        lose,
-                        target,
-                        start_time,
-                        end_time,
-                        total_time,
-                        hint_usage,
-                        score,
-                        all_guesses,
-                        player_history,
-                        status
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                ''', (
-                    self.num_of_rounds,
-                    self.num_of_players,
-                    self.num_of_random_nums,
-                    self.game_id,
-                    self.current_round,
-                    self.current_player,
-                    self.win,
-                    self.lose,
-                    json.dumps(self.target),
-                    self.start_time,
-                    self.end_time if self.lose or self.win else None,
-                    self.total_time,
-                    json.dumps(self.hints),
-                    self.score,
-                    json.dumps(self.all_guesses),
-                    self.show_player_history(),
-                    self.status
-                ))
-                conn.commit()
-        
-        [player.update_db() for player in self.players]
-
+            
 
     def increment_round(self):
         """"Increment the round and lowers the turns remaining"""
@@ -324,3 +198,134 @@ class Game:
         rounds_left = self.num_of_rounds - self.current_round
 
         return (1 / self.num_of_rounds) * 1000 + len(self.target) * 200 + rounds_left * 100
+
+
+    @staticmethod
+
+    def from_db(row):
+        """
+        Load game and players and make game class and player class respectively
+        """
+        game = Game(
+            row[1],
+            row[2],
+            row[3],
+            row[0]) #game_id
+        game.current_round = row[4]
+        game.current_player = row[5]
+        game.win = row[6]
+        game.lose = row[7]
+        game.target = json.loads(row[8])
+        game.start_time = row[9]
+        game.end_time = row[10]
+        game.total_time = row[11]
+        game.hint_usage = row[12]
+        game.score = row[13]
+        game.all_guesses = json.loads(row[14])
+        game.winner = row[15]
+        game.player_history = row[16]
+        game.status = row[17]
+
+        with get_db() as conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                SELECT player_id,name, score, game_histories, player_order, game_id FROM players
+                WHERE game_histories LIKE ?
+                ORDER BY player_order ASC
+            ''', ('%' + game.game_id + '%',))
+            player_rows = cursor.fetchall()
+            
+            game.players = [Player.from_db(row, game.game_id) for row in player_rows]  
+        
+        game.guess_set = set([tuple(guess) for guess in game.all_guesses])
+        return game
+
+
+    def update_db(self):
+        """
+        Update the database with all the game data.
+        If the game_id is not found, insert a new game record.
+        """
+        with get_db() as conn:
+            cursor = conn.cursor()
+
+            cursor.execute('SELECT 1 FROM games WHERE game_id = ?', (self.game_id,))
+            game_exists = cursor.fetchone()
+
+            if game_exists:
+                cursor.execute('''
+                    UPDATE games SET
+                        current_round = ?,
+                        current_player = ?,
+                        win = ?,
+                        lose = ?,
+                        target = ?,
+                        start_time = ?,
+                        end_time = ?,
+                        total_time = ?,
+                        hint_usage = ?,
+                        score = ?,
+                        all_guesses = ?,
+                        player_history = ?,
+                        status = ?
+                    WHERE game_id = ?
+                ''', (
+                    self.current_round,
+                    self.current_player,
+                    self.win,
+                    self.lose,
+                    json.dumps(self.target),
+                    self.start_time,
+                    self.end_time if self.lose or self.win else None,
+                    self.total_time,
+                    json.dumps(self.hints),
+                    self.score,
+                    json.dumps(self.all_guesses),
+                    self.show_player_history(),
+                    self.status,
+                    self.game_id
+                ))
+            else:
+                cursor.execute('''
+                    INSERT INTO games (
+                        num_of_rounds,
+                        num_of_players,
+                        num_of_random_nums,
+                        game_id,
+                        current_round,
+                        current_player,
+                        win,
+                        lose,
+                        target,
+                        start_time,
+                        end_time,
+                        total_time,
+                        hint_usage,
+                        score,
+                        all_guesses,
+                        player_history,
+                        status
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ''', (
+                    self.num_of_rounds,
+                    self.num_of_players,
+                    self.num_of_random_nums,
+                    self.game_id,
+                    self.current_round,
+                    self.current_player,
+                    self.win,
+                    self.lose,
+                    json.dumps(self.target),
+                    self.start_time,
+                    self.end_time if self.lose or self.win else None,
+                    self.total_time,
+                    json.dumps(self.hints),
+                    self.score,
+                    json.dumps(self.all_guesses),
+                    self.show_player_history(),
+                    self.status
+                ))
+                conn.commit()
+        
+        [player.update_db() for player in self.players]
+
