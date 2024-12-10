@@ -1,11 +1,10 @@
-from flask import Blueprint, request, jsonify,current_app
+from flask import Blueprint, request, jsonify,current_app, session
 from game_logic.core import Game
 from database.models import get_db
 import json
 import time
 import uuid
 from config import CACHE_TIMEOUT
-
 bp = Blueprint('games', __name__, url_prefix='/games')
 
 @bp.route("/start_game", methods=["POST"])
@@ -22,7 +21,10 @@ def start_game():
     game_id = str(uuid.uuid4())
     
     game = Game(num_of_rounds, num_of_players, num_of_random_nums, game_id)
-    game.add_players()
+    if session.get("player_id"):
+        game.add_players(session.get("player_id"))
+    else:
+        game.add_players()
     cache = current_app.config['CACHE']
 
     cache.set(game_id,game, timeout= CACHE_TIMEOUT)
@@ -169,7 +171,20 @@ def game_status():
 def get_all_games():
     with get_db() as conn:
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM games WHERE status = ?', ('Ongoing',))
+        player_id = session.get("player_id")
+        cursor.execute('SELECT game_id FROM players WHERE player_id = ?', (player_id,))
+
+        result = cursor.fetchone()
+        game_ids = json.loads(result[0])
+
+        placeholders = ', '.join(['?'] * len(game_ids))  
+        query = f'''
+            SELECT * 
+            FROM games 
+            WHERE game_id IN ({placeholders})
+        '''
+        
+        cursor.execute(query, game_ids)
         rows = cursor.fetchall()
 
         if rows:
@@ -201,6 +216,7 @@ def load_game():
         game_data = cursor.fetchone()
         if game_data:
             game = Game.from_db(game_data)
+            
         else:
             print(f"No game found for game_id: {game_id}")
         

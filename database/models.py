@@ -37,10 +37,13 @@ def init_db():
                 player_id TEXT PRIMARY KEY,
                 game_id TEXT,
                 name TEXT,
+                username TEXT UNIQUE NOT NULL,
+                password TEXT NOT NULL,
                 score INTEGER DEFAULT 0,
                 game_histories TEXT,
                 player_order INT,
                 FOREIGN KEY (game_id) REFERENCES games(game_id)
             );
         ''')
+
         conn.commit()

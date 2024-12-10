@@ -33,10 +33,37 @@ class Game:
 
         self.status = "Ongoing"
 
-    def add_players(self):
-        self.players = [Player(self.game_id, i + 1) for i in range(self.num_of_players)]
-        for player in self.players:
-            player.save()
+    def add_players(self, player_id = None):
+        if player_id:
+            self.players = [Player.from_db(self.get_player_from_db(player_id), self.game_id)]
+        else:
+            self.players = [Player(self.game_id, i + 1) for i in range(self.num_of_players)]
+            for player in self.players:
+                player.save()
+    def get_player_from_db(self, player_id):
+        with get_db() as conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                    SELECT player_id,name, score, game_histories, player_order, game_id from players WHERE player_id = ?
+                           ''', (player_id, ))
+            result = cursor.fetchone()
+
+            if result:
+                if result[5] == None:
+                    game_id_history  = []
+                else:
+                    game_id_history = json.loads(result[5])
+                if self.game_id not in game_id_history :
+                    game_id_history.append(self.game_id)
+                    cursor.execute('''
+                    UPDATE players
+                    SET game_id = ?
+                    WHERE player_id = ?
+                ''', (json.dumps(game_id_history), player_id))
+                if result:
+                    return result
+            
+
     @staticmethod
 
     def from_db(row):
@@ -62,9 +89,13 @@ class Game:
 
         with get_db() as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM players WHERE game_id = ? ORDER BY player_order ASC", (game.game_id,))
+            cursor.execute('''
+                SELECT player_id,name, score, game_histories, player_order, game_id FROM players
+                WHERE game_histories LIKE ?
+                ORDER BY player_order ASC
+            ''', ('%' + game.game_id + '%',))
             player_rows = cursor.fetchall()
-            game.players = [Player.from_db(row) for row in player_rows]  
+            game.players = [Player.from_db(row, game.game_id) for row in player_rows]  
         
         game.guess_set = set([tuple(guess) for guess in game.all_guesses])
         return game
@@ -118,6 +149,8 @@ class Game:
         self.update_db()
 
     def get_current_player(self):
+        print(self.current_player)
+        print(self.players)
         return self.players[self.current_player - 1]
     
 

@@ -1,5 +1,5 @@
 import tkinter as tk
-
+import requests
 class MainMenu(tk.Frame):
     def __init__(self, parent, controller):
         super().__init__(parent)
@@ -24,6 +24,15 @@ class MainMenu(tk.Frame):
         start_button.pack(pady=10)
         exit_button = tk.Button(self, text="Exit", command=self.controller.quit)
         exit_button.pack(pady=10)
+
+    #     get_session = tk.Button(self, text= "Get session", command= self.get_session)
+    #     get_session.pack(pady=10)
+
+    # def get_session(self):
+    #     session = self.controller.get_session()
+    #     request = session.get("http://127.0.0.1:5000/players/get_session")
+    #     if request.status_code == 200:
+    #         print(request.json())
 
     def load_game_frame(self):
         game_screen = self.controller.frames["load_game"]

@@ -7,6 +7,7 @@ class LoadGame(tk.Frame):
         self.api_base_url = "http://127.0.0.1:5000/games"
         self.game_id_var = tk.StringVar()
         self.games_frame = None
+        self.current_session = self.controller.get_session()
         self.create_widgets()
 
     def create_widgets(self):
@@ -32,7 +33,7 @@ class LoadGame(tk.Frame):
             widget.destroy()
 
         try:
-            response = requests.get(f"{self.api_base_url}/get_all_games")
+            response = self.current_session.get(f"{self.api_base_url}/get_all_games")
             response.raise_for_status()
             games = response.json()
 

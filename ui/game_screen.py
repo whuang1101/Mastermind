@@ -9,6 +9,7 @@ class GameScreen(tk.Frame):
         self.game = None
         self.create_widgets()
         self.api_base_url = "http://127.0.0.1:5000/games" 
+        self.current_session = self.controller.get_session()
     #setting up game screen widgets to interact with the game class
     
     def initialize_game(self, num_of_rounds, num_of_players, target_length):
@@ -17,7 +18,7 @@ class GameScreen(tk.Frame):
             "num_of_players": num_of_players,
             "num_of_random_nums": target_length
         }
-        response = requests.post(f"{self.api_base_url}/start_game", json=payload)
+        response = self.current_session.post(f"{self.api_base_url}/start_game", json=payload)
         if response.status_code == 200:
             game_data = response.json()
             self.game_id = game_data["game_id"]
@@ -35,7 +36,7 @@ class GameScreen(tk.Frame):
 
 
     def load_game(self, game_id):
-        game_response = requests.get(f"{self.api_base_url}/load_game?game_id={game_id} ")
+        game_response = self.current_session.get(f"{self.api_base_url}/load_game?game_id={game_id} ")
         if game_response.status_code == 200:
             game = game_response.json().get("game")
             self.num_of_rounds = game["num_of_rounds"]
@@ -59,7 +60,7 @@ class GameScreen(tk.Frame):
         """
         
         """
-        response = requests.get(f"{self.api_base_url}/get_game_stats?game_id={self.game_id}")
+        response = self.current_session.get(f"{self.api_base_url}/get_game_stats?game_id={self.game_id}")
         if response.status_code == 200:
             game_status = response.json()
             self.num_of_rounds = game_status["num_of_rounds"]
@@ -132,7 +133,7 @@ class GameScreen(tk.Frame):
     
 
     def get_hint(self):
-        hint_response = requests.get(f"{self.api_base_url}/hint?game_id={self.game_id}")
+        hint_response = self.current_session.get(f"{self.api_base_url}/hint?game_id={self.game_id}")
         if hint_response.status_code == 200:
             hint_json = hint_response.json()
             self.hint_label.config(text = hint_json["hint"])
@@ -143,7 +144,7 @@ class GameScreen(tk.Frame):
         self.history_label.grid(row=8, column=0, columnspan=4, pady=10)
 
         #shows each individual players history
-        history_response = requests.get(f"{self.api_base_url}/player_history?game_id={self.game_id}")
+        history_response = self.current_session.get(f"{self.api_base_url}/player_history?game_id={self.game_id}")
         if history_response.status_code == 200:
             history_json = history_response.json()
             self.history_label.config(text= history_json["history"])
@@ -164,14 +165,14 @@ class GameScreen(tk.Frame):
                 return
             
         payload = {"guess": guess}
-        response = requests.post(f"{self.api_base_url}/make_guess?game_id={self.game_id}", json=payload)
+        response = self.current_session.post(f"{self.api_base_url}/make_guess?game_id={self.game_id}", json=payload)
         if response.status_code == 200:
             feedback = response.json()["message"]
             self.feedback_label.config(text=f"Feedback: {feedback}")
         
 
         game_status = self.update_game_status()
-        win_loss = requests.get(f"{self.api_base_url}/win_loss?game_id={self.game_id}")
+        win_loss = self.current_session.get(f"{self.api_base_url}/win_loss?game_id={self.game_id}")
         if win_loss.status_code == 200:
             win_loss_json = win_loss.json()
             if win_loss_json["status"] == "winner":

@@ -13,11 +13,12 @@ class Player:
 
     def add_game_history(self, game_id, numbers, correct_positions, correct_numbers, time):
         game_id = game_id.strip()
+        if game_id not in self.game_histories:
+            self.game_histories[game_id] = []
         self.game_histories[game_id].append([numbers, correct_positions, correct_numbers, time])
         self.update_db()
 
     def display_history(self):
-
         if self.game_id in self.game_histories and not self.game_histories[self.game_id]:
             return "No guesses were made by this player yet"
         else:
@@ -47,7 +48,7 @@ class Player:
 
     def update_db(self):
         serialized_history = json.dumps(self.game_histories)
-
+        
         with get_db() as conn:
             cursor = conn.cursor()
             cursor.execute('''
@@ -60,10 +61,13 @@ class Player:
             conn.commit()
 
     @staticmethod
-    def from_db(player_row):
+    def from_db(player_row, game_id):
         """Load a player from the database row"""
-        player_id, game_id, name, score, game_histories, player_order = player_row
-        game_histories = json.loads(game_histories) 
+        player_id, name, score, game_histories, player_order,game_ids = player_row
+        if not game_histories:
+            game_histories = defaultdict(list)
+        else:
+            game_histories = json.loads(game_histories) 
         player = Player(game_id=game_id, player_order=player_order, score=score, player_id=player_id, name=name)
         player.game_histories = game_histories
         return player
