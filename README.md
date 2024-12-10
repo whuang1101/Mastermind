@@ -24,7 +24,7 @@ This game allows users to play, log in, and create accounts. It offers various f
 - **Keep track of scores**: Track player scores across different games.
 - **Player individual history**: Access detailed history for each game played, including performance stats and results.
 
-- #### Game State Management
+#### Game State Management(Logged In)
 - **Save game**: Save game progress at any point to resume later.
 - **Load game**: Load previously saved game states to continue where you left off.
 
