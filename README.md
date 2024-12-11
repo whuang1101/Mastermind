@@ -79,6 +79,7 @@ python backend.py
 ```
 
 #### Start the Frontend Application
+- Open a new terminal to run the Front end.
 ```bash
 python main.py
 ```
