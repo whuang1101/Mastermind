@@ -1,3 +1,5 @@
+# API Documentation
+
 # Game API Documentation
 
 This API allows users to interact with a game system, where players can start a game, make guesses, track game status, and manage their game history.
@@ -177,7 +179,7 @@ Get all the games associated with the current player.
 **No games found.**: If no games are found for the current player.
 
 
-### 9. GET /games/load_game
+### 9. `GET /games/load_game`
 Load a game from the database.
 
 #### Request Parameters:
@@ -268,3 +270,32 @@ Log out the current player by clearing the session.
   "message": "Logged out successfully"
 }
 ```
+
+# Scores API Documentation
+
+This API allows users to view the leaderboard and the scores associated with each player in the game system.
+
+## Base URL
+All endpoints are prefixed with `/scores`.
+
+---
+
+## Endpoints
+
+### 1. `GET /scores/leaderboard`
+Get the leaderboard with the top scores.
+
+#### Response:
+```json
+[
+  {
+    "player_name": "string",
+    "num_of_rounds": 4,
+    "score": 1800
+  },
+   {
+    "player_name": "string",
+    "num_of_rounds": 4,
+    "score": 1600
+  },
+]```
