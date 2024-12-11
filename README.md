@@ -21,7 +21,9 @@
   - [Guest Play](#guest-play)  
   - [Logged In Features](#logged-in-features)  
     - [Game State Management (Logged In)](#game-state-management-logged-in)  
-  - [Sign Out](#sign-out)  
+  - [Sign Out](#sign-out)
+- [Next Steps & Enhancements](#next-steps-&-enhancements)
+- [Parting Thoughts](#parting-thoughts)
 
 ## Introduction
 Welcome to the **Mastermind** game setup guide! Follow the steps below to set up and run the application on your local machine.
@@ -120,3 +122,19 @@ This game allows users to play, log in, and create accounts. It offers various f
 
 ### Sign Out
 - **Sign out**: Users can log out and return to guest mode or sign in with another account.
+
+## Next Steps & Enhancements
+  **Track Total Game Time:**
+  - Display the total game time after the game ends.
+  **Lives System:**
+  - Introduce a simple lives counter where the player can have a maximum of 3 guesses.
+  **All Player History**
+  - Implement all player histories instead of just current player
+  **Leaderboard**
+  - Query-based on different things like difficulty
+
+## Parting Thoughts:
+Building Mastermind has been an incredibly rewarding experience, particularly in enhancing my backend engineering skills. Implementing features such as user accounts, game state management, and saving/loading game progress provided valuable insights into server-side logic and data persistence, as well as the integration between frontend and backend. Looking back, I recognize areas where earlier testing and a more structured approach to database operations could have streamlined the process. My enthusiasm for Flask and relational databases continues to grow, and I’m eager to explore best practices as I continue refining the game.
+
+With plenty of room for further development, especially around player history tracking and leaderboards, I'm excited to keep evolving the project and further hone my backend skills. The journey has reinforced my passion for learning and continuous improvement!
+
