@@ -15,9 +15,9 @@ Start a new game.
 #### Request Body:
 ```json
 {
-  "num_of_rounds": int,
-  "num_of_players": int,
-  "num_of_random_nums": int
+  "num_of_rounds": 10,
+  "num_of_players": 1,
+  "num_of_random_nums": 4
 }
 ```
 #### Response:
@@ -58,13 +58,13 @@ Response:
 ```json
 {
   "game_id": "game_id",
-  "num_of_rounds": int,
-  "num_of_players": int,
-  "current_round": int,
-  "current_player": int,
+  "num_of_rounds": 10,
+  "num_of_players": 1,
+  "current_round": 2,
+  "current_player": 1,
   "target": "target_string",
   "time": "start_time",
-  "turns_remaining": int,
+  "turns_remaining": 8,
   "player_name": "player_name"
 }
 ```
@@ -113,7 +113,7 @@ Get a hint for the current game.
 - game_id: The ID of the game.
 ```json
 {
-hint: [1]
+""hint"": [1]
 }
 ```
 #### Errors:
@@ -139,3 +139,62 @@ Check if the game is over or if there is a winner.
 #### Errors:
 **Game not started!**: If the game has not started yet.
 
+
+### `8. GET /games/get_all_games`
+Get all the games associated with the current player.
+
+#### Response:
+```json
+[
+  {
+    "game_id": "game_id",
+    "num_of_rounds": 5,
+    "num_of_players": 3,
+    "num_of_random_nums": 10,
+    "current_round": 2,
+    "current_player": 1,
+    "win": false,
+    "lose": false,
+    "target": "12345",
+    "time": "2024-12-11T10:30:00Z"
+  },
+  {
+    "game_id": "another_game_id",
+    "num_of_rounds": 3,
+    "num_of_players": 2,
+    "num_of_random_nums": 7,
+    "current_round": 1,
+    "current_player": 2,
+    "win": true,
+    "lose": false,
+    "target": "67890",
+    "time": "2024-12-10T15:45:00Z"
+  }
+]
+```
+
+#### Errors:
+**No games found.**: If no games are found for the current player.
+
+
+### 9. GET /games/load_game
+Load a game from the database.
+
+#### Request Parameters:
+game_id: The ID of the game.
+#### Response:
+```json
+{
+  "game": {
+    "target_length": 4,
+    "turns_remaining": 2,
+    "current_round": 1,
+    "current_player": 1,
+    "num_of_rounds": 5,
+    "num_of_players": 2,
+    "player_name": "player_name"
+  }
+}```
+
+#### Errors:
+**Error loading game!**: If the game could not be loaded.
