@@ -100,7 +100,7 @@ Get the player's history
 #### Response:
 ```json
 {
-history: "Here's your history: 
+"history": "Here's your history: 
 In round 1 you guessed [1, 2, 3, 4] and you got 1 positions correct and 3 numbers correct in 2.76 seconds."
 }
 ```
@@ -113,7 +113,7 @@ Get a hint for the current game.
 - game_id: The ID of the game.
 ```json
 {
-""hint"": [1]
+"hint": [1]
 }
 ```
 #### Errors:
@@ -183,6 +183,7 @@ Load a game from the database.
 #### Request Parameters:
 game_id: The ID of the game.
 #### Response:
+
 ```json
 {
   "game": {
@@ -194,7 +195,10 @@ game_id: The ID of the game.
     "num_of_players": 2,
     "player_name": "player_name"
   }
-}```
+```
+}
+
+
 
 #### Errors:
 **Error loading game!**: If the game could not be loaded.
