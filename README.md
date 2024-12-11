@@ -20,7 +20,8 @@
 Welcome to the **Mastermind** game setup guide! Follow the steps below to set up and run the application on your local machine.
 
 ## Prerequisites
-- **Python 3.7+** installed.
+- **Python 3.13** installed.
+- If you don't have this installed yet go to [python.org](https://www.python.org/downloads/)
 - **Git** installed.
 
 ## Steps to Setup
