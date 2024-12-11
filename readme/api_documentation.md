@@ -19,12 +19,14 @@ Start a new game.
   "num_of_players": int,
   "num_of_random_nums": int
 }
+```
 #### Response:
 ```json
 {
   "message": "Game started successfully!",
   "game_id": "game_id"
 }
+````
 
 #### Errors:
 - Missing parameter: <parameter>: If any required parameter (num_of_rounds, num_of_players, num_of_random_nums) is missing.
@@ -37,10 +39,12 @@ Save the current game state to the database
 {
   "game_id": "game_id"
 }
+```
 #### Response:
 ```json
 {
   "message": "Game was updated"
 }
+```
 #### Errors:
 - **game was not found**: If the game with the given ID was not found
