@@ -21,7 +21,7 @@ Welcome to the **Mastermind** game setup guide! Follow the steps below to set up
 
 ## Prerequisites
 - **Python 3.13** installed.
-- If you don't have this installed yet go to [python.org](https://www.python.org/downloads/)
+- If you don't have this installed yet go to [python.org](https://www.python.org/downloads/) to get the instructions to download python.
 - **Git** installed.
 
 ## Steps to Setup
