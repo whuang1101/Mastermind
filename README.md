@@ -1,14 +1,19 @@
-# Welcome to Mastermind
+# Mastermind Setup Guide
 
 ## Table of Contents
-- [Introduction](#-introduction#-)
-- [Game Features](#-gamefeatures#-)
-
-## Introduction
-Mastermind is a code-breaking game where users are given a certain number of rounds to decipher a secret x-digit code. Play the game as a guest and have fun in a non-competitive environment or make an account. Logging in allows you to be able to save games, save your scores, and compete on the leaderboards to see who can get the highest score!
-
-## How to setup on local device 
-# Mastermind Setup Guide
+- [Introduction](#introduction)
+- [Prerequisites](#prerequisites)
+- [Steps to Setup](#steps-to-setup)
+  - [1. Clone the Repository](#1-clone-the-repository)
+  - [2. Navigate to the Repository](#2-navigate-to-the-repository)
+  - [3. Set Up a Virtual Environment](#3-set-up-a-virtual-environment)
+    - [If You Don’t Have `virtualenv` Installed](#if-you-dont-have-virtualenv-installed)
+    - [Create and Activate the Virtual Environment](#create-and-activate-the-virtual-environment)
+  - [4. Install Dependencies](#4-install-dependencies)
+  - [5. Run the Applications](#5-run-the-applications)
+    - [Start the Backend Server](#start-the-backend-server)
+    - [Start the Frontend Application](#start-the-frontend-application)
+- [Notes](#notes)
 
 ## Introduction
 Welcome to the **Mastermind** game setup guide! Follow the steps below to set up and run the application on your local machine.
@@ -70,9 +75,6 @@ python main.py
 - Make sure all dependencies are installed properly to avoid runtime errors.
 
 Enjoy playing **Mastermind**! 🎮
-
-
-
 
 ## Game Features
 
