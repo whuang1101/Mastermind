@@ -198,3 +198,73 @@ game_id: The ID of the game.
 
 #### Errors:
 **Error loading game!**: If the game could not be loaded.
+
+
+
+# Players API Documentation
+
+This API allows users to register, log in, log out, and manage sessions for the players in the game system.
+
+## Base URL
+All endpoints are prefixed with `/players`.
+
+---
+
+## Endpoints
+
+### 1. `POST /players/register`
+Register a new player.
+
+#### Request Body:
+```json
+{
+  "name": "string",
+  "username": "string",
+  "password": "string"
+}
+``` 
+### Response:
+
+```json
+{
+  "message": "Registration successful",
+  "player_id": "player_id"
+}
+```
+#### Errors:
+- Username and password are required: If the username or password is missing.
+- 500 Internal Server Error: If there is an issue with inserting data into the database.
+
+### 2. `POST /players/login`
+Log in an existing player.
+
+#### Request Body:
+```json
+{
+  "username": "string",
+  "password": "string"
+}
+```
+#### Response:
+```json
+
+{
+  "message": "Login successful",
+  "player_id": "player_id"
+}
+``` 
+#### Errors:
+- Username and password are required: If the username or password is missing.
+- Username was not found: If the username doesn't exist in the database.
+- Invalid password: If the password is incorrect.
+- 500 Internal Server Error: If there is an issue with querying the database.
+
+### 3. `POST /players/logout`
+Log out the current player by clearing the session.
+
+#### Response:
+```json
+{
+  "message": "Logged out successfully"
+}
+```
