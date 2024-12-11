@@ -1,23 +1,27 @@
 # Mastermind Setup Guide
 
 ## Table of Contents
-- [Introduction](#introduction)
-- [Prerequisites](#prerequisites)
-- [Steps to Setup](#steps-to-setup)
-  - [1. Clone the Repository](#1-clone-the-repository)
-  - [2. Navigate to the Repository](#2-navigate-to-the-repository)
-  - [3. Set Up a Virtual Environment](#3-set-up-a-virtual-environment)
-    - [If You Don’t Have `virtualenv` Installed](#if-you-dont-have-virtualenv-installed)
-    - [Create and Activate the Virtual Environment](#create-and-activate-the-virtual-environment)
-  - [4. Install Dependencies](#4-install-dependencies)
-  - [5. Run the Applications](#5-run-the-applications)
-    - [Start the Backend Server](#start-the-backend-server)
-    - [Start the Frontend Application](#start-the-frontend-application)
-- [My Daily Thought Process and Progress](#my-daily-thought-process-and-progress)
-- [API Documentation](#api-documentation)
-- [Game Demo](#game-demo)
-- [Notes](#notes)
-- [Game Features](#game-features)
+- [Introduction](#introduction)  
+- [Prerequisites](#prerequisites)  
+- [Steps to Setup](#steps-to-setup)  
+  - [1. Clone the Repository](#1-clone-the-repository)  
+  - [2. Navigate to the Repository](#2-navigate-to-the-repository)  
+  - [3. Set Up a Virtual Environment](#3-set-up-a-virtual-environment)  
+    - [If You Don’t Have `virtualenv` Installed](#if-you-dont-have-virtualenv-installed)  
+    - [Create and Activate the Virtual Environment](#create-and-activate-the-virtual-environment)  
+  - [4. Install Dependencies](#4-install-dependencies)  
+  - [5. Run the Applications](#5-run-the-applications)  
+    - [Start the Backend Server](#start-the-backend-server)  
+    - [Start the Frontend Application](#start-the-frontend-application)  
+- [Notes](#notes)  
+- [My Daily Thought Process and Progress](#my-daily-thought-process-and-progress)  
+- [API Documentation](#api-documentation)  
+- [Game Demo](#game-demo)  
+- [Game Features](#game-features)  
+  - [Guest Play](#guest-play)  
+  - [Logged In Features](#logged-in-features)  
+    - [Game State Management (Logged In)](#game-state-management-logged-in)  
+  - [Sign Out](#sign-out)  
 
 ## Introduction
 Welcome to the **Mastermind** game setup guide! Follow the steps below to set up and run the application on your local machine.
@@ -82,7 +86,7 @@ python main.py
 
 Enjoy playing **Mastermind**! 🎮
 
-## My Daily Thought Process and Progress  ---> [Logs](/readme/logs.md)
+## My Daily Thought Process and Progress  --------> [Logs](/readme/logs.md)
 
 ## API Documentation --------> [API Documentation](/readme/api_documentation.md)
 
