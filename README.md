@@ -117,9 +117,7 @@ This game allows users to play, log in, and create accounts. It offers various f
 ### Logged In Features
 - **Create an account and log in**: Players can register for an account and log in to track their progress.
 - **View leaderboard**: See the leaderboard with the highest scores.
-- **Keep track of scores**: Track player scores across different games.
-- **Player individual history**: Access detailed history for each game played, including performance stats and results.
-
+- **Player individual history**: Access player_history for each game.
 #### Game State Management(Logged In)
 - **Save game**: Save game progress at any point to resume later.
 - **Load game**: Load previously saved game states to continue where you left off.
