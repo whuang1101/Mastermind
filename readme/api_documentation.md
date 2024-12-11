@@ -102,8 +102,7 @@ Get the player's history
 #### Response:
 ```json
 {
-"history": "Here's your history: 
-In round 1 you guessed [1, 2, 3, 4] and you got 1 positions correct and 3 numbers correct in 2.76 seconds."
+"history": "Here's your history: In round 1 you guessed [1, 2, 3, 4] and you got 1 positions correct and 3 numbers correct in 2.76 seconds."
 }
 ```
 #### Errors:
