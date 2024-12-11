@@ -74,13 +74,6 @@ def logout():
     session.clear() 
     return jsonify({"message": "Logged out successfully"}), 200
 
-@bp.route("/get_session",methods = ["GET"])
-def get_session():
-    session_data = session
-
-    print(session)
-    jsonify({"session": "hey"}), 200
-
 
     
 

@@ -106,6 +106,7 @@ def get_player_history():
         return jsonify({"error": "Game not found!"}), 404
 
     history = game.show_player_history()
+    print(history)
     
     return jsonify({"history": history}), 200
 
