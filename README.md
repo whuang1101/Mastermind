@@ -14,6 +14,7 @@
     - [Start the Backend Server](#start-the-backend-server)
     - [Start the Frontend Application](#start-the-frontend-application)
 - [My Daily Thought Process and Progress](#my-daily-thought-process-and-progress)
+- [API Documentation](#api-documentation)
 - [Game Demo](#game-demo)
 - [Notes](#notes)
 - [Game Features](#game-features)
@@ -83,6 +84,7 @@ Enjoy playing **Mastermind**! 🎮
 
 ## My Daily Thought Process and Progress  ---> [Logs](/readme/logs.md)
 
+## API Documentation --------> [API Documentation](/readme/api_documentation.md)
 
 ## Game Demo
 - Click on this link [MasterMind Demo](https://youtu.be/ArRAV395sT4) to view a full demo on the capabilities of this app
