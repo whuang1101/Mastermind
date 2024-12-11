@@ -24,6 +24,7 @@
   - [Sign Out](#sign-out)
 - [Next Steps & Enhancements](#next-steps-&-enhancements)
 - [Parting Thoughts](#parting-thoughts)
+- [Contact Me](#contact-me)
 
 ## Introduction
 Welcome to the **Mastermind** game setup guide! Follow the steps below to set up and run the application on your local machine.
@@ -86,7 +87,7 @@ python main.py
 - Ensure the backend server is running before starting the frontend.
 - Make sure all dependencies are installed properly to avoid runtime errors.
 
-Enjoy playing **Mastermind**! 🎮
+Enjoy playing **Mastermind**! 
 
 ## My Daily Thought Process and Progress
 - To view my thought process during and after the journey click [Logs](/readme/logs.md)
@@ -139,6 +140,6 @@ Building Mastermind has been an incredibly rewarding experience, particularly in
 With plenty of room for further development, especially around player history tracking and leaderboards, I'm excited to keep evolving the project and further hone my backend skills. The journey has reinforced my passion for learning and continuous improvement!
 
 ##Contact Me
-- Any questions about this README? Feel free to reach out to me:
-  - [Email me](wilsonhuang11012000@gmail.com) 
-  - [Connect on LinkedIn: Wilson Huang](https://www.linkedin.com/in/wilson-huang-720493179/)
+Have any questions about this README? Feel free to reach out:
+- 📧 **Email**: [wilsonhuang11012000@gmail.com](mailto:wilsonhuang11012000@gmail.com)
+- 🌐 **LinkedIn**: [Wilson Huang](https://www.linkedin.com/in/wilson-huang-720493179/)
