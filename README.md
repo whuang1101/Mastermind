@@ -79,7 +79,7 @@ python main.py
 
 Enjoy playing **Mastermind**! 🎮
 
-## My Daily Thought Process and Progress [here](/readme/logs.md)
+## My Daily Thought Process and Progress  ---> [Logs](/readme/logs.md)
 
 
 ## Game Demo
