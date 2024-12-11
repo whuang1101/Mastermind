@@ -86,9 +86,11 @@ python main.py
 
 Enjoy playing **Mastermind**! 🎮
 
-## My Daily Thought Process and Progress  --------> [Logs](/readme/logs.md)
+## My Daily Thought Process and Progress
+- [Logs](/readme/logs.md)
 
-## API Documentation --------> [API Documentation](/readme/api_documentation.md)
+## API Documentation 
+- **[API Documentation](/readme/api_documentation.md)
 
 ## Game Demo
 - Click on this link [MasterMind Demo](https://youtu.be/ArRAV395sT4) to view a full demo on the capabilities of this app
