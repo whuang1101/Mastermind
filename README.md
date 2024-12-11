@@ -13,6 +13,8 @@
   - [5. Run the Applications](#5-run-the-applications)
     - [Start the Backend Server](#start-the-backend-server)
     - [Start the Frontend Application](#start-the-frontend-application)
+- [My Daily Thought Process and Progress](#my-daily-thought-process-and-progress)
+- [Game Demo](#game-demo)
 - [Notes](#notes)
 - [Game Features](#game-features)
 
