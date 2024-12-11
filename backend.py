@@ -24,5 +24,4 @@ app.register_blueprint(players.bp)
 app.register_blueprint(scores.bp)
 
 if __name__ == "__main__":
-
     app.run(debug=DEBUG)

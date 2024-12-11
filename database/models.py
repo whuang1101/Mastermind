@@ -21,7 +21,7 @@ def init_db():
                 start_time REAL,
                 end_time REAL,
                 total_time REAL,
-                hint_usage INTEGER,
+                hint_usage TEXT,
                 all_guesses TEXT,
                 winner INTEGER,
                 player_history TEXT,

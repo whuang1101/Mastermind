@@ -9,7 +9,7 @@ def game():
 
 @pytest.fixture
 def mock_game_with_target():
-    game = Game(num_of_rounds=5, num_of_players=2, num_of_random_nums=4)
+    game = Game(game_id= "id", num_of_rounds=5, num_of_players=2, num_of_random_nums=4)
     game.target = [1, 2, 3, 4]  
     return game
 

@@ -14,11 +14,10 @@ class Player:
 
     def add_game_id(self):
         self.game_histories[self.game_id] = []
-    def add_game_history(self, game_id, numbers, correct_positions, correct_numbers, time):
-        game_id = game_id.strip()
-        if game_id not in self.game_histories:
-            self.game_histories[game_id] = []
-        self.game_histories[game_id].append([numbers, correct_positions, correct_numbers, time])
+    def add_game_history(self, numbers, correct_positions, correct_numbers, time):
+        if self.game_id not in self.game_histories:
+            self.game_histories[self.game_id] = []
+        self.game_histories[self.game_id].append([numbers, correct_positions, correct_numbers, time])
 
     def display_history(self):
         if self.game_id not in self.game_histories:

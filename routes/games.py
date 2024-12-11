@@ -42,6 +42,7 @@ def save_game():
     game_id = data.get("game_id")
     
     cache = current_app.config['CACHE']
+    
     game = cache.get(game_id)
     if not game:
         return jsonify({"error": "game was not found"})
@@ -112,12 +113,16 @@ def get_player_history():
 
 @bp.route("/hint", methods=["GET"])
 def hint():
-    game_id = request.args.get("game_id") 
+    game_id = request.args.get("game_id")
     game = cached_or_get_from_db(game_id)
+
     if not game:
         return jsonify({"error": "Game not found!"}), 404
 
     hint = game.give_hint()
+    cache = current_app.config['CACHE']
+
+    cache.set(game_id,game, timeout= CACHE_TIMEOUT) 
     return jsonify({"hint": hint}), 200
 
 

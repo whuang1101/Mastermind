@@ -31,6 +31,9 @@ class Game:
         self.status = "Ongoing"
 
     def add_players(self, player_id=None):
+        '''
+
+        '''
         if player_id:
             player = Player.from_db(self.get_player_from_db(player_id), self.game_id)
             self.players.append(player)
@@ -42,6 +45,9 @@ class Game:
             self.players.append(guest_player)
 
     def get_player_from_db(self, player_id):
+        '''
+        Get's player from the database and adds the game_id to it's history.
+        '''
         with get_db() as conn:
             cursor = conn.cursor()
             cursor.execute('''
@@ -126,7 +132,7 @@ class Game:
         #Getting time for each player
         turn_time = time.time() - self.time
         self.time = time.time()
-        current_player.add_game_history(self.game_id,guess,correct_positions,correct_numbers, turn_time)
+        current_player.add_game_history(guess,correct_positions,correct_numbers, turn_time)
 
         if self.current_player == self.num_of_players:
             self.increment_round()
@@ -211,7 +217,7 @@ class Game:
         game.start_time = row[7]
         game.end_time = row[8]
         game.total_time = row[9]
-        game.hint_usage = row[10]
+        game.hint_usage = json.loads(row[10])
         game.all_guesses = json.loads(row[11])
         game.winner = row[12]
         game.player_history = row[13]

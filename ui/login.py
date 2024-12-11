@@ -20,11 +20,14 @@ class LoginPage(tk.Frame):
         self.password_entry = tk.Entry(self, show="*")
         self.password_entry.pack()
 
-        tk.Button(self, text = "Play as Guest", command = self.go_to_main_menu).pack()
 
         tk.Button(self, text="Login", command=self.login).pack(pady=10)
-        tk.Button(self, text="Register", command=self.go_to_register).pack()
+        tk.Button(self, text="Register", command=self.go_to_register).pack(pady=10)
+        tk.Button(self, text = "Play as Guest", command = self.go_to_main_menu).pack(pady=10)
 
+
+        exit_button = tk.Button(self, text="Exit", command=self.controller.quit)
+        exit_button.pack(pady=10)
 
     def login(self):
         username = self.username_entry.get()
@@ -47,3 +50,4 @@ class LoginPage(tk.Frame):
         self.controller.show_frame("register")
     def go_to_main_menu(self):
         self.controller.show_frame("main_menu")
+

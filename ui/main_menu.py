@@ -41,8 +41,6 @@ class MainMenu(tk.Frame):
 
 
         start_button.pack(pady=10)
-        exit_button = tk.Button(self, text="Exit", command=self.controller.quit)
-        exit_button.pack(pady=10)
 
     def logout(self):
         res = self.current_session.post("http://127.0.0.1:5000/players/logout")

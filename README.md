@@ -79,6 +79,9 @@ python main.py
 
 Enjoy playing **Mastermind**! 🎮
 
+## My Daily Thought Process and Progress[here](/readme/logs.md)
+
+
 ## Game Features
 
 This game allows users to play, log in, and create accounts. It offers various features for both logged-out and logged-in users, with a focus on player history, game progress, and customization. Below is a list of the main features available in the game:
