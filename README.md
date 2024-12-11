@@ -8,25 +8,68 @@
 Mastermind is a code-breaking game where users are given a certain number of rounds to decipher a secret x-digit code. Play the game as a guest and have fun in a non-competitive environment or make an account. Logging in allows you to be able to save games, save your scores, and compete on the leaderboards to see who can get the highest score!
 
 ## How to setup on local device 
-Follow these steps to set up and run the Mastermind application on your local device.
+Mastermind Setup Guide
 
----
+Introduction
 
-## Prerequisites
+Welcome to the Mastermind game setup guide! Follow the steps below to set up and run the application on your local machine.
 
-1. **Git**: Ensure Git is installed on your device. [Install Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) if not already available.
-2. **Python**: Ensure Python 3.6+ is installed. [Download Python](https://www.python.org/downloads/).
+Prerequisites
 
----
+Python 3.7+ installed.
 
-## Setup Instructions
+Git installed.
 
-### 1. Clone the Repository
+Steps to Setup
 
-Clone the project repository from GitHub:
+1. Clone the Repository
 
-```bash
-git clone git@github.com:whuang1101/Mastermind.git
+$ git clone git@github.com:whuang1101/Mastermind.git
+
+2. Navigate to the Repository
+
+$ cd Mastermind
+
+3. Set Up a Virtual Environment
+
+If You Don’t Have virtualenv Installed:
+
+$ pip install virtualenv
+
+Create and Activate the Virtual Environment:
+
+On Windows:
+
+$ python -m venv venv
+$ venv\Scripts\activate
+
+On Linux/Mac:
+
+$ python3 -m venv venv
+$ source venv/bin/activate
+
+4. Install Dependencies
+
+$ pip install -r requirements.txt
+
+5. Run the Applications
+
+Start the Backend Server
+
+$ python backend.py
+
+Start the Frontend Application
+
+$ python main.py
+
+Notes
+
+Ensure the backend server is running before starting the frontend.
+
+Make sure all dependencies are installed properly to avoid runtime errors.
+
+Enjoy playing Mastermind! 🎮
+
 
 ## Game Features
 
