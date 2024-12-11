@@ -1,4 +1,5 @@
 import requests
+import random
 
 def get_random_numbers(number_of_ints, min_guess,max_guess):
 
@@ -20,7 +21,8 @@ def get_random_numbers(number_of_ints, min_guess,max_guess):
             if response.status_code == 200:
                 new_numbers = list(map(int, response.text.split()))
                 unique_numbers = list(set(unique_numbers + new_numbers))
-
+        #make sure the numbers don't stay in order
+        random.shuffle(unique_numbers)
         print(f"Generated Unique Numbers: {unique_numbers[:number_of_ints]}")
         return unique_numbers[:number_of_ints] 
     else:

@@ -16,11 +16,11 @@ class LoadGame(tk.Frame):
 
         self.games_frame = tk.Frame(self)
         self.games_frame.pack(fill="both", expand=True)
-        self.start_button = tk.Button(
+        self.load_button = tk.Button(
             self, text="Load Game",
             command=self.load_single_game
         )
-        self.start_button.pack(pady=10)
+        self.load_button.pack(pady=10)
 
         main_menu = tk.Button(
             self, text="Main Menu",
@@ -36,8 +36,10 @@ class LoadGame(tk.Frame):
             response = self.current_session.get(f"{self.api_base_url}/get_all_games")
             response.raise_for_status()
             games = response.json()
+            self.load_button.pack(pady=10)
 
             if games:
+                self.game_id_var.set(games[0]['game_id'])
                 for i, game in enumerate(games):
                     tk.Radiobutton(
                         self.games_frame,
@@ -48,7 +50,8 @@ class LoadGame(tk.Frame):
             else:
                 tk.Label(self.games_frame, text="No games found.").pack()
         except requests.RequestException as e:
-            tk.Label(self.games_frame, text=f"Error fetching games: {e}").pack()
+            self.load_button.forget()
+            tk.Label(self.games_frame, text=f"No games Found").pack()
 
     def load_single_game(self):
         selected_game_id = self.game_id_var.get()

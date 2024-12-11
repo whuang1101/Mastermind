@@ -61,6 +61,8 @@ def get_game_stats():
 
 
     if game:
+        turns_remaining = game.num_of_rounds - game.current_round + 1
+        print(turns_remaining)
         game_status = {
         "game_id": game.game_id,
         "num_of_rounds": game.num_of_rounds,
@@ -69,9 +71,10 @@ def get_game_stats():
         "current_player": game.current_player,
         "target": game.target, 
         "time": game.start_time,
-        "turns_remaining": game.num_of_rounds - game.current_round + 1,
+        "turns_remaining": turns_remaining,
         "player_name": game.players[game.current_player - 1].name
         }
+        print(game_status)
         return jsonify(game_status), 200
     else:
         return jsonify({"error": "Game not found!"}), 404
@@ -93,7 +96,6 @@ def make_guess():
 
     response = game.check_guess(guess)
     cache = current_app.config['CACHE']
-
     cache.set(game_id,game, timeout= CACHE_TIMEOUT)
 
     return jsonify({"message": response}), 200
@@ -106,7 +108,6 @@ def get_player_history():
         return jsonify({"error": "Game not found!"}), 404
 
     history = game.show_player_history()
-    print(history)
     
     return jsonify({"history": history}), 200
 
@@ -138,10 +139,10 @@ def game_status():
     if not game:
         return jsonify({"error": "Game not started!"}), 400
     status = game.status
-    if status == "winner":
-        return jsonify({"status": "winner"}), 200
-    if status == "game_over":
-        return jsonify({"status": "game_over"})
+    if status == "Winner":
+        return jsonify({"status": "Winner"}), 200
+    if status == "Game Over":
+        return jsonify({"status": "Game Over"}), 200
     cache = current_app.config['CACHE']
 
     cache.set(game_id,game, timeout= CACHE_TIMEOUT)
@@ -159,15 +160,15 @@ def get_all_games():
         result = cursor.fetchone()
         game_ids = json.loads(result[0])
 
-        placeholders = ', '.join(['?'] * len(game_ids))  
+        placeholders = ', '.join(['?'] * len(game_ids))
         query = f'''
             SELECT * 
             FROM games 
-            WHERE game_id IN ({placeholders})
+            WHERE game_id IN ({placeholders}) AND status = ?
         '''
-        
-        cursor.execute(query, game_ids)
+        cursor.execute(query, game_ids + ["Ongoing"])
         rows = cursor.fetchall()
+
 
         if rows:
             games = [

@@ -17,6 +17,7 @@ def leaderboard():
             JOIN players p ON s.player_id = p.player_id
             JOIN games g ON s.game_id = g.game_id
             ORDER BY s.score DESC
+            LIMIT 10
         ''')
         results = cursor.fetchall()
         if results:

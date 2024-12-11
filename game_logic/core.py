@@ -27,7 +27,6 @@ class Game:
         self.end_time = time.time()
         self.players = []
         self.guess_set = set() #used for faster querying
-
         self.status = "Ongoing"
 
     def add_players(self, player_id=None):
@@ -148,6 +147,8 @@ class Game:
             self.status = "Game Over"
             new_time = time.time()
             self.total_time = new_time - self.start_time
+            if self.logged_in:
+                self.update_db()
             return f"No one wins! The solution was {self.target}"
         
 
@@ -217,13 +218,13 @@ class Game:
         game.start_time = row[7]
         game.end_time = row[8]
         game.total_time = row[9]
-        game.hint_usage = json.loads(row[10])
+        game.hints = json.loads(row[10])
         game.all_guesses = json.loads(row[11])
         game.winner = row[12]
         game.player_history = row[13]
         game.status = row[14]
         game.logged_in = True
-
+        
         with get_db() as conn:
             cursor = conn.cursor()
             cursor.execute('''

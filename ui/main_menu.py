@@ -16,17 +16,24 @@ class MainMenu(tk.Frame):
         )
         start_button.pack(pady=10)
 
+
+        self.instructions_button = tk.Button(
+            self, text= "Instructions",
+            command= lambda: self.go_to_instructions()
+        )
+        self.instructions_button.pack(pady=10)
+        self.leaderboard_button = tk.Button(
+            self, text= "Leaderboard",
+            command= lambda: self.go_to_leaderboard()
+        )
+        self.leaderboard_button.pack(pady=10)
+
         self.login_button = tk.Button(
             self, text="Go to Login",
             command=lambda: self.go_to_login()
         )
         self.login_button.pack_forget()
 
-        self.leaderboard_button = tk.Button(
-            self, text= "Leaderboard",
-            command= lambda: self.go_to_leaderboard()
-        )
-        self.leaderboard_button.pack(pady=10)
         self.load_game_button = tk.Button(
             self, text="Load Game",
             command=lambda: self.load_game_frame()
@@ -55,6 +62,8 @@ class MainMenu(tk.Frame):
         self.controller.show_frame("login")
     def go_to_leaderboard(self):
         self.controller.show_frame("leaderboard")
+    def go_to_instructions(self):
+        self.controller.show_frame("instructions")
     def on_show(self):
         if self.controller.get_session().cookies.get_dict():
             self.load_game_button.pack(pady=10)

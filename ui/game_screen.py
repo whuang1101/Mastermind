@@ -68,7 +68,8 @@ class GameScreen(tk.Frame):
             self.num_of_rounds = game_status["num_of_rounds"]
             self.target_length = len(game_status["target"])
             self.num_of_players = game_status["num_of_players"]
-            self.round_label.config(text=f"Round {game_status['current_round']}/{game_status['num_of_rounds']}")
+            if game_status['current_round'] <= game_status['num_of_rounds']:
+                self.round_label.config(text=f"Round {game_status['current_round']}/{game_status['num_of_rounds']}")
             self.turn_label.config(text=f"Turns remaining: {game_status['turns_remaining']}")
             self.player_label.config(text=f"{game_status['player_name']}'s Turn:")
             self.target = game_status['target']
@@ -92,7 +93,7 @@ class GameScreen(tk.Frame):
 
 
         self.submit_button = tk.Button(self, text="Submit Guess", command=self.submit_guess)
-        self.submit_button.grid(row=4, column=0, columnspan=2, pady=10)
+        self.submit_button.grid(row=4, column=0, columnspan=4, pady=10)
         self.save_button = tk.Button(self, text = "Save Game", command= self.save_game)
 
         
@@ -180,26 +181,25 @@ class GameScreen(tk.Frame):
             self.feedback_label.config(text=f"Feedback: {feedback}")
         
 
-        game_status = self.update_game_status()
         win_loss = self.current_session.get(f"{self.api_base_url}/win_loss?game_id={self.game_id}")
         if win_loss.status_code == 200:
             win_loss_json = win_loss.json()
-            if win_loss_json["status"] == "winner":
+            if win_loss_json["status"] == "Winner":
                 self.submit_button.config(text="Play Again?",command =lambda: self.start_new_game(self.num_of_rounds, self.num_of_players, self.target_length) )
                 return
-            if win_loss_json["status"] == "game_over":
-                self.submit_button.config(text="Try Again?",command =self.reset_game )
-                self.round_label.config(text = f"Round {self.game.current_round - 1}")
-                return
 
 
 
+        self.update_game_status()
         # Confirms backend check and gives feedback on what to change if it passes the frontend.
         if feedback.startswith("Invalid"):
             self.feedback_label.config(text=f"Feedback: {feedback}")
             return
         self.feedback_label.config(text=f"Feedback: {feedback}")
         self.history_label.grid_forget()
+        if win_loss_json["status"] == "Game Over":
+                self.submit_button.config(text = "Try Again?", command = lambda: self.start_new_game(self.num_of_rounds, self.num_of_players, self.target_length) )
+                return
 
     def save_game(self):
         data = {"game_id": self.game_id}
@@ -215,6 +215,7 @@ class GameScreen(tk.Frame):
         if self.controller.get_session().cookies.get_dict():
             if not self.save_button.winfo_ismapped():
                 self.save_button.grid(row=4, column=2, columnspan=2, pady=10)
+                self.submit_button.grid(row = 4, column=0, columnspan=2, pady=10)
 
         else:
             if self.save_button.winfo_ismapped():  

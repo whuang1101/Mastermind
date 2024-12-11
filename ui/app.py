@@ -5,6 +5,7 @@ from .load_game import LoadGame
 from .login import LoginPage
 from .register import RegisterPage
 from .leaderboard import Leaderboard
+from .instructions import Instructions
 import tkinter as tk
 import requests
 from tkinter import messagebox
@@ -23,7 +24,8 @@ class MasterMindApp(tk.Tk):
             "load_game": LoadGame,
             "login": LoginPage,
             "register": RegisterPage,
-            "leaderboard": Leaderboard
+            "leaderboard": Leaderboard,
+            "instructions": Instructions,
         }
 
         container = tk.Frame(self)
