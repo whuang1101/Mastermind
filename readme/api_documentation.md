@@ -298,4 +298,4 @@ Get the leaderboard with the top scores.
     "num_of_rounds": 4,
     "score": 1600
   },
-]```
+]
