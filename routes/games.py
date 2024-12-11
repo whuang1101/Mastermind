@@ -62,7 +62,6 @@ def get_game_stats():
 
     if game:
         turns_remaining = game.num_of_rounds - game.current_round + 1
-        print(turns_remaining)
         game_status = {
         "game_id": game.game_id,
         "num_of_rounds": game.num_of_rounds,
@@ -74,7 +73,6 @@ def get_game_stats():
         "turns_remaining": turns_remaining,
         "player_name": game.players[game.current_player - 1].name
         }
-        print(game_status)
         return jsonify(game_status), 200
     else:
         return jsonify({"error": "Game not found!"}), 404

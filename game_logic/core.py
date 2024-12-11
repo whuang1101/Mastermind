@@ -31,7 +31,7 @@ class Game:
 
     def add_players(self, player_id=None):
         '''
-
+            Add players either guest or from DB
         '''
         if player_id:
             player = Player.from_db(self.get_player_from_db(player_id), self.game_id)

@@ -73,7 +73,6 @@ class GameScreen(tk.Frame):
             self.turn_label.config(text=f"Turns remaining: {game_status['turns_remaining']}")
             self.player_label.config(text=f"{game_status['player_name']}'s Turn:")
             self.target = game_status['target']
-            print(f"Current Target: {self.target}")
         else:
             print("Error fetching game status:", response.json())
 

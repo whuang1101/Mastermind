@@ -39,7 +39,6 @@ class RegisterPage(tk.Frame):
                 self.go_to_login()
         except:
             error_message = response.json().get("error", "An error occurred.")
-            print(error_message)
             messagebox.showerror("Error", error_message)
 
 

@@ -41,7 +41,6 @@ class LoginPage(tk.Frame):
                 self.go_to_main_menu()
         except:
             error_message = response.json().get("error", "An error occurred.")
-            print(error_message)
             messagebox.showerror("Error", error_message)
 
     def play_as_guest(self):

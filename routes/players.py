@@ -31,7 +31,6 @@ def register():
             conn.commit()
         return jsonify({"message": "Registration successful", "player_id": player_id}), 201
     except Exception as e:
-        print(e)
         return jsonify({"error": str(e)}), 500
 
 @bp.route("/login", methods = ["POST"])
