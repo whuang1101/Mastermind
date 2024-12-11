@@ -8,67 +8,70 @@
 Mastermind is a code-breaking game where users are given a certain number of rounds to decipher a secret x-digit code. Play the game as a guest and have fun in a non-competitive environment or make an account. Logging in allows you to be able to save games, save your scores, and compete on the leaderboards to see who can get the highest score!
 
 ## How to setup on local device 
-Mastermind Setup Guide
+# Mastermind Setup Guide
 
-Introduction
+## Introduction
+Welcome to the **Mastermind** game setup guide! Follow the steps below to set up and run the application on your local machine.
 
-Welcome to the Mastermind game setup guide! Follow the steps below to set up and run the application on your local machine.
+## Prerequisites
+- **Python 3.7+** installed.
+- **Git** installed.
 
-Prerequisites
+## Steps to Setup
 
-Python 3.7+ installed.
+### 1. Clone the Repository
+```bash
+git clone git@github.com:whuang1101/Mastermind.git
+```
 
-Git installed.
+### 2. Navigate to the Repository
+```bash
+cd Mastermind
+```
 
-Steps to Setup
+### 3. Set Up a Virtual Environment
 
-1. Clone the Repository
+#### If You Don’t Have `virtualenv` Installed:
+```bash
+pip install virtualenv
+```
 
-$ git clone git@github.com:whuang1101/Mastermind.git
+#### Create and Activate the Virtual Environment:
+- On **Windows**:
+  ```bash
+  python -m venv venv
+  venv\Scripts\activate
+  ```
+- On **Linux/Mac**:
+  ```bash
+  python3 -m venv venv
+  source venv/bin/activate
+  ```
 
-2. Navigate to the Repository
+### 4. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
 
-$ cd Mastermind
+### 5. Run the Applications
 
-3. Set Up a Virtual Environment
+#### Start the Backend Server
+```bash
+python backend.py
+```
 
-If You Don’t Have virtualenv Installed:
+#### Start the Frontend Application
+```bash
+python main.py
+```
 
-$ pip install virtualenv
+## Notes
+- Ensure the backend server is running before starting the frontend.
+- Make sure all dependencies are installed properly to avoid runtime errors.
 
-Create and Activate the Virtual Environment:
+Enjoy playing **Mastermind**! 🎮
 
-On Windows:
 
-$ python -m venv venv
-$ venv\Scripts\activate
-
-On Linux/Mac:
-
-$ python3 -m venv venv
-$ source venv/bin/activate
-
-4. Install Dependencies
-
-$ pip install -r requirements.txt
-
-5. Run the Applications
-
-Start the Backend Server
-
-$ python backend.py
-
-Start the Frontend Application
-
-$ python main.py
-
-Notes
-
-Ensure the backend server is running before starting the frontend.
-
-Make sure all dependencies are installed properly to avoid runtime errors.
-
-Enjoy playing Mastermind! 🎮
 
 
 ## Game Features
