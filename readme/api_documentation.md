@@ -185,7 +185,6 @@ game_id: The ID of the game.
 #### Response:
 
 ```json
-{
   "game": {
     "target_length": 4,
     "turns_remaining": 2,
@@ -196,9 +195,6 @@ game_id: The ID of the game.
     "player_name": "player_name"
   }
 ```
-}
-
-
 
 #### Errors:
 **Error loading game!**: If the game could not be loaded.
