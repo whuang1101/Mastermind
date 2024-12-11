@@ -14,6 +14,7 @@
     - [Start the Backend Server](#start-the-backend-server)
     - [Start the Frontend Application](#start-the-frontend-application)
 - [Notes](#notes)
+- [Game Features](#game-features)
 
 ## Introduction
 Welcome to the **Mastermind** game setup guide! Follow the steps below to set up and run the application on your local machine.
