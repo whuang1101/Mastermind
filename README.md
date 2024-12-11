@@ -138,3 +138,7 @@ Building Mastermind has been an incredibly rewarding experience, particularly in
 
 With plenty of room for further development, especially around player history tracking and leaderboards, I'm excited to keep evolving the project and further hone my backend skills. The journey has reinforced my passion for learning and continuous improvement!
 
+##Contact Me
+- Any questions about this README? Feel free to reach out to me:
+  - [Email me](wilsonhuang11012000@gmail.com) 
+  - [Connect on LinkedIn: Wilson Huang](https://www.linkedin.com/in/wilson-huang-720493179/)
