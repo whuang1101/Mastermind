@@ -48,3 +48,44 @@ Save the current game state to the database
 ```
 #### Errors:
 - **game was not found**: If the game with the given ID was not found
+
+### 3. GET /games/get_game_stats
+Get the current game status.
+
+#### Request Parameters:
+game_id: The ID of the game.
+Response:
+```json
+{
+  "game_id": "game_id",
+  "num_of_rounds": int,
+  "num_of_players": int,
+  "current_round": int,
+  "current_player": int,
+  "target": "target_string",
+  "time": "start_time",
+  "turns_remaining": int,
+  "player_name": "player_name"
+}
+```
+#### Errors:
+Game not found!: If the game is not found.
+
+### 4. POST /games/make_guess
+Make a guess in the current game.
+
+#### Request Body:
+```json
+{
+  "guess": "guess_string"
+}
+```
+#### Response:
+
+```json
+{
+  "message": "response_message"
+}
+```
+#### Errors:
+Missing 'guess' parameter: If the guess parameter is missing.
