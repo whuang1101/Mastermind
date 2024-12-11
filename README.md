@@ -102,6 +102,7 @@ Enjoy playing **Mastermind**!
 
 ## Game Features
 
+Creative Extensions: Create Account, Sign in, Difficulty modes, Loading game, Leaderboard, Scores, Local multiplayer, and Hints
 This game allows users to play, log in, and create accounts. It offers various features for both logged-out and logged-in users, with a focus on player history, game progress, and customization. Below is a list of the main features available in the game:
 
 ### Guest Play
