@@ -82,6 +82,10 @@ Enjoy playing **Mastermind**! 🎮
 ## My Daily Thought Process and Progress [here](/readme/logs.md)
 
 
+## Game Demo
+- Click on this link [MasterMind Demo](https://youtu.be/ArRAV395sT4) to view a full demo on the capabilities of this app
+- **Login** Using the username **demo** and password **demo**
+
 ## Game Features
 
 This game allows users to play, log in, and create accounts. It offers various features for both logged-out and logged-in users, with a focus on player history, game progress, and customization. Below is a list of the main features available in the game:
@@ -95,7 +99,6 @@ This game allows users to play, log in, and create accounts. It offers various f
 
 
 ### Logged In Features
-- **Login** Using the username **demo** and password **demo**
 - **Create an account and log in**: Players can register for an account and log in to track their progress.
 - **View leaderboard**: See the leaderboard with the highest scores.
 - **Keep track of scores**: Track player scores across different games.
