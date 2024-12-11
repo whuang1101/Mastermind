@@ -5,7 +5,7 @@ class Leaderboard(tk.Frame):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
-        self.title_label = tk.Label(self, text="Leaderboard", font=("Arial", 24))
+        self.title_label = tk.Label(self, text="Leaderboard(Top 10)", font=("Arial", 24))
         self.title_label.pack(pady=20)
         self.current_session = self.controller.get_session()
 
