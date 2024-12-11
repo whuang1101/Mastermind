@@ -39,7 +39,7 @@ class GameScreenSetup(tk.Frame):
             "Easy": (10, 4),  
             "Medium": (7, 5),
             "Hard": (5, 6), 
-            "Extreme": (3,8)
+            "Extreme": (3,7)
         }
 
         num_of_rounds, target_length = difficulty_settings[self.difficulty.get()]

@@ -13,7 +13,7 @@ class MasterMindApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("MasterMind")
-        self.geometry("800x600")
+        self.geometry("1000x800")
         self.frames = {}
         self.session = requests.Session()
         self.pages = {

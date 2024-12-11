@@ -200,8 +200,6 @@ def load_game():
 
     cache.set(game_id, game, timeout= CACHE_TIMEOUT)
     if game:
-        print(game.current_player)
-        print(game.players)
         game_status = {
             "target_length": len(game.target),
             "turns_remaining": game.num_of_rounds - game.current_round + 1,
@@ -222,7 +220,6 @@ def cached_or_get_from_db(game_id):
 
     game = cache.get(game_id)
     if not game:
-        # If not cached, check the database
         with get_db() as conn:
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM games WHERE game_id = ?", (game_id,))

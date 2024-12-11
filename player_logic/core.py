@@ -21,11 +21,9 @@ class Player:
         self.game_histories[game_id].append([numbers, correct_positions, correct_numbers, time])
 
     def display_history(self):
-        
         if self.game_id not in self.game_histories:
             return "No guesses were made by this player yet"
         elif self.game_id in self.game_histories and not self.game_histories[self.game_id]:
-            print("hey")
             return "No guesses were made by this player yet"
         else:
             history = ["Here's your history: "]

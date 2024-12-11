@@ -12,8 +12,17 @@ def get_random_numbers(number_of_ints, min_guess,max_guess):
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
         new_numbers = list(map(int, response.text.split()))
-        print(f"Generated Numbers: {new_numbers}")
-        return new_numbers
+        
+        unique_numbers = list(set(new_numbers))
+        
+        while len(unique_numbers) < number_of_ints:
+            response = requests.get(url, headers=headers)
+            if response.status_code == 200:
+                new_numbers = list(map(int, response.text.split()))
+                unique_numbers = list(set(unique_numbers + new_numbers))
+
+        print(f"Generated Unique Numbers: {unique_numbers[:number_of_ints]}")
+        return unique_numbers[:number_of_ints] 
     else:
         print(f"Error: Unable to fetch data. Response content: {response.text}")
         return None
