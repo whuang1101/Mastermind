@@ -47,4 +47,7 @@ class RegisterPage(tk.Frame):
 
 
     def go_to_login(self):
+        self.name_entry.delete(0, tk.END)
+        self.username_entry.delete(0, tk.END)
+        self.password_entry.delete(0, tk.END)
         self.controller.show_frame("login")

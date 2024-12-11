@@ -45,9 +45,15 @@ class LoginPage(tk.Frame):
             messagebox.showerror("Error", error_message)
 
     def play_as_guest(self):
+        self.username_entry.delete(0, tk.END)
+        self.password_entry.delete(0, tk.END)
         self.controller.show_frame("main_menu")
     def go_to_register(self):
+        self.username_entry.delete(0, tk.END)
+        self.password_entry.delete(0, tk.END)
         self.controller.show_frame("register")
     def go_to_main_menu(self):
+        self.username_entry.delete(0, tk.END)
+        self.password_entry.delete(0, tk.END)
         self.controller.show_frame("main_menu")
 
